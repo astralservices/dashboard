@@ -1,8 +1,9 @@
 ---
 import WorkspaceSidebar from "./WorkspaceSidebar.astro";
 
+const { sidebar: sidebarProps } = Astro.props
 ---
 
-<WorkspaceSidebar>
+<WorkspaceSidebar {...sidebarProps}>
     <slot />
 </WorkspaceSidebar>
