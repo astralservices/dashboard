@@ -1,0 +1,241 @@
+---
+import { GetPlans } from "../../utils/workspace";
+import GenericLayout from "../components/GenericLayout.astro";
+import WorkspaceLayout from "../components/WorkspaceLayout.astro";
+
+const plans = await GetPlans(import.meta.env, Astro);
+---
+
+<GenericLayout>
+  <script is:inline>
+    var loadFile = function (event) {
+      var output = document.getElementById("imagepreview");
+      output.src = URL.createObjectURL(event.target.files[0]);
+      output.onload = function () {
+        URL.revokeObjectURL(output.src); // free memory
+      };
+    };
+  </script>
+  <WorkspaceLayout sidebar={{ showLogo: true }}>
+    <div>
+      <h1 class="flex w-full gap-2 text-3xl font-bold">
+        <span class="w-10 h-10"> 👋</span>
+        Hey there!
+      </h1>
+      <h3 class="text-xl font-semibold">We're glad you're here.</h3>
+    </div>
+    <form
+      class="grid w-full grid-cols-2 space-y-10"
+      enctype="multipart/form-data"
+      action={`${import.meta.env.PUBLIC_API_ENDPOINT}/api/v1/workspaces`}
+      method="post"
+    >
+      <div class="flex flex-col space-y-1 col-span-full">
+        <label class="text-sm font-semibold"
+          >Workspace name <span class="text-sm text-red-500 align-super"
+            >*
+          </span>
+        </label>
+        <input
+          required
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg dark:bg-black-200 dark:border-none"
+          type="text"
+          placeholder="My Workspace"
+          name="name"
+        />
+      </div>
+
+      <div class="flex flex-col space-y-1 col-span-full">
+        <label class="text-sm font-semibold"
+          >Workspace icon <span class="text-sm text-red-500 align-super"
+            >*
+          </span>
+        </label>
+        <div class="flex items-center space-x-3 align-middle">
+          <img id="imagepreview" class="w-12 h-12 bg-gray-300 rounded-full" />
+          <input
+            name="icon"
+            type="file"
+            id="imageinput"
+            required
+            accept="image/png, image/jpeg"
+            onchange="loadFile(event)"
+            class="block text-sm transition-colors duration-100 text-slate-500 dark:text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-astral file:text-white hover:file:bg-astral-500"
+          />
+        </div>
+      </div>
+
+      <div class="flex flex-col space-y-1 col-span-full">
+        <label class="text-sm font-semibold"
+          >Workspace description
+        </label><textarea
+          name="description"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg dark:bg-black-200 dark:border-none"
+          placeholder="My Workspace Description"></textarea>
+      </div>
+
+      <div class="flex flex-col space-y-1 col-span-full">
+        <fieldset
+          class="flex flex-col space-y-1 col-span-full"
+          name="visibilitySelect"
+        >
+          <legend class="text-sm font-semibold"
+            >Workspace Visibility <span class="text-sm text-red-500 align-super"
+              >*
+            </span>
+          </legend>
+          <div class="-space-y-px bg-white rounded-md dark:bg-black-200">
+            <!-- Checked: "bg-indigo-50 border-indigo-200 z-10", Not Checked: "border-gray-200" -->
+            <label
+              class="relative flex p-4 border border-gray-200 cursor-pointer rounded-tl-md rounded-tr-md dark:border-black-400 focus:outline-none"
+            >
+              <input
+                type="radio"
+                name="visibility"
+                value="public"
+                class="h-4 w-4 mt-0.5 cursor-pointer shrink-0 text-astral  dark:border-black-500"
+                aria-labelledby="privacy-setting-0-label"
+                aria-describedby="privacy-setting-0-description"
+              />
+              <span class="flex flex-col ml-3">
+                <!-- Checked: "text-indigo-900", Not Checked: "text-gray-900" -->
+                <span
+                  id="privacy-setting-0-label"
+                  class="block text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Public
+                </span>
+                <!-- Checked: "text-indigo-700", Not Checked: "text-gray-500" -->
+                <span
+                  id="privacy-setting-0-description"
+                  class="block text-sm text-gray-500 dark:text-gray-200"
+                >
+                  Anyone can request to join your workspace. Shows up on
+                  workspaces page.
+                </span>
+              </span>
+            </label>
+
+            <!-- Checked: "bg-indigo-50 border-indigo-200 z-10", Not Checked: "border-gray-200" -->
+            <label
+              class="relative flex p-4 border border-gray-200 cursor-pointer dark:border-black-400 focus:outline-none"
+            >
+              <input
+                type="radio"
+                name="visibility"
+                value="unlisted"
+                class="h-4 w-4 mt-0.5 cursor-pointer shrink-0 text-indigo-600"
+                aria-labelledby="privacy-setting-1-label"
+                aria-describedby="privacy-setting-1-description"
+              />
+              <span class="flex flex-col ml-3">
+                <!-- Checked: "text-indigo-900", Not Checked: "text-gray-900" -->
+                <span
+                  id="privacy-setting-1-label"
+                  class="block text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Unlisted
+                </span>
+                <!-- Checked: "text-indigo-700", Not Checked: "text-gray-500" -->
+                <span
+                  id="privacy-setting-1-description"
+                  class="block text-sm text-gray-500 dark:text-gray-200"
+                >
+                  Anyone with a link can request to join your workspace.
+                </span>
+              </span>
+            </label>
+
+            <!-- Checked: "bg-indigo-50 border-indigo-200 z-10", Not Checked: "border-gray-200" -->
+            <label
+              class="relative z-10 flex p-4 border border-indigo-200 cursor-pointer rounded-bl-md rounded-br-md dark:border-black-400 focus:outline-none"
+            >
+              <input
+                type="radio"
+                name="visibility"
+                value="private"
+                checked
+                class="h-4 w-4 mt-0.5 cursor-pointer shrink-0 text-indigo-600"
+                aria-labelledby="privacy-setting-2-label"
+                aria-describedby="privacy-setting-2-description"
+              />
+              <span class="flex flex-col ml-3">
+                <!-- Checked: "text-indigo-900", Not Checked: "text-gray-900" -->
+                <span
+                  id="privacy-setting-2-label"
+                  class="block text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Private
+                </span>
+                <!-- Checked: "text-indigo-700", Not Checked: "text-gray-500" -->
+                <span
+                  id="privacy-setting-2-description"
+                  class="block text-sm text-gray-500 dark:text-gray-200"
+                >
+                  Only invited users can join your workspace.
+                </span>
+              </span>
+            </label>
+          </div>
+        </fieldset>
+      </div>
+      <div class="flex flex-col space-y-1 col-span-full">
+        <fieldset
+          class="flex flex-col space-y-1 col-span-full"
+          name="planSelect"
+        >
+          <legend class="text-sm font-semibold"
+            >Workspace Plan <span class="text-sm text-red-500 align-super"
+              >*
+            </span>
+          </legend>
+          <div class="-space-y-px bg-white rounded-md dark:bg-black-200">
+            {plans.map((plan, i) => (
+              <label
+                aria-disabled={!plan.enabled}
+                class={`relative flex p-4 border border-gray-200
+                            cursor-pointer group first:rounded-tl-md first:rounded-tr-md last:rounded-bl-md
+                            last:rounded-br-md dark:border-black-400 focus:outline-none ${
+                              !plan.enabled ? "opacity-25" : ""
+                            }`}
+              >
+                <input
+                  type="radio"
+                  name="plan"
+                  value={plan.id}
+                  checked={i === 0}
+                  disabled={!plan.enabled}
+                  class="h-4 w-4 mt-0.5 cursor-pointer shrink-0 text-astral dark:border-black-500"
+                  aria-labelledby="privacy-setting-0-label"
+                  aria-describedby="privacy-setting-0-description"
+                />
+                <span class="flex flex-col ml-3">
+                  <span
+                    id="privacy-setting-0-label"
+                    class="block text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    {plan.name}
+                  </span>
+                  <span
+                    id="privacy-setting-0-description"
+                    class="block text-sm text-gray-500 dark:text-gray-200"
+                  >
+                    {plan.limit}
+                  </span>
+                </span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+      </div>
+      <input hidden readonly name="redirect" value={Astro.site} />
+      <div class="flex col-span-full">
+        <button
+          type="submit"
+          class="transition-colors duration-100 rounded-lg bg-astral text-white hover:bg-astral-600 px-4 py-2.5 "
+          ><span class="text-sm font-bold">Create Workspace</span>
+        </button>
+      </div>
+    </form>
+  </WorkspaceLayout>
+</GenericLayout>

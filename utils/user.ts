@@ -1,5 +1,11 @@
 import { AstroGlobal } from "astro";
-import { DiscordUserInfo, APIResponse, Provider, Workspace } from "../types";
+import {
+  DiscordUserInfo,
+  APIResponse,
+  Provider,
+  Workspace,
+  WorkspaceMember,
+} from "../types";
 
 export async function GetUser(
   env: Record<string, string>,
@@ -81,7 +87,7 @@ export async function GetAllWorkspaces(
   env: Record<string, string>,
   Astro: AstroGlobal
 ): Promise<Workspace[] | null> {
-  const data: APIResponse<Workspace[]> = await fetch(
+  const data: APIResponse<WorkspaceMember[]> = await fetch(
     `${
       env.SECRET_NODE_ENV === "production"
         ? import.meta.env.PUBLIC_API_ENDPOINT
@@ -99,11 +105,11 @@ export async function GetAllWorkspaces(
     return null;
   }
 
-  return data.result;
+  return data.result.map((workspace) => workspace.workspace as Workspace);
 }
 
 export function SetWorkspace(workspace: Workspace): void {
-  window.location.href = `/workspace/${workspace.id}`;
+  window.location.href = `/workspaces/${workspace.id}`;
   localStorage.setItem("workspace", JSON.stringify(workspace));
 }
 
@@ -113,4 +119,40 @@ export function GetWorkspace(): Workspace | null {
     return null;
   }
   return JSON.parse(workspace);
+}
+
+export enum Actions {
+  MODIFY_WORKSPACE_MEMBER = "MODIFY_WORKSPACE_MEMBER",
+  DELETE_WORKSPACE_MEMBER = "DELETE_WORKSPACE_MEMBER",
+  ADD_WORKSPACE_MEMBER = "ADD_WORKSPACE_MEMBER",
+
+  UPDATE_WORKSPACE = "UPDATE_WORKSPACE",
+}
+
+export enum Roles {
+  OWNER = "OWNER",
+  ADMIN = "ADMIN",
+  MEMBER = "MEMBER",
+}
+
+export const PermissionMapping = new Map<Actions, Roles[]>([
+  [Actions.MODIFY_WORKSPACE_MEMBER, [Roles.OWNER, Roles.ADMIN]],
+  [Actions.DELETE_WORKSPACE_MEMBER, [Roles.OWNER, Roles.ADMIN]],
+  [Actions.ADD_WORKSPACE_MEMBER, [Roles.OWNER, Roles.ADMIN]],
+  [Actions.UPDATE_WORKSPACE, [Roles.OWNER]],
+]);
+
+export function HasPermission(member: WorkspaceMember, action: Actions) {
+  if (!PermissionMapping.has(action)) {
+    return false;
+  }
+
+  const roles = PermissionMapping.get(action);
+  if (!roles) {
+    return false;
+  }
+
+  const memberRole = Roles[member.role.toUpperCase() as keyof typeof Roles];
+
+  return roles.includes(memberRole);
 }

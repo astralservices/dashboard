@@ -1,4 +1,5 @@
 ---
+import { PlusCircleIcon } from "@heroicons/react/solid";
 import { GetAllWorkspaces, GetUser } from "../../utils/user";
 import GenericLayout from "../components/GenericLayout.astro";
 import WorkspaceLayout from "../components/WorkspaceLayout.astro";
@@ -8,23 +9,39 @@ const user = await GetUser(import.meta.env, Astro);
 ---
 
 <GenericLayout>
-	<WorkspaceLayout sidebar={{ showLogo: false }}>
-		<div class="grid w-full grid-cols-2 gap-3 lg:grid-cols-3 md:grid-cols-2">
-			<div class="col-span-full">
-				<h1 class="flex w-full gap-2 text-3xl font-bold"><span class="w-10 h-10">👋</span> Welcome back,
-					{user.provider_data.username}!</h1>
-				<h3 class="text-xl font-semibold">Here's your workspaces.</h3>
-			</div>
-			{workspaces.map((workspace) => (
-			<a class="w-full h-full" href="/workspaces/f3ac7c3a-acde-4a71-a721-c663da177608">
-				<div
-					class="grid justify-center w-full h-full p-4 space-y-2 bg-white border border-gray-300 rounded-lg md:grid-cols-3 dark:bg-black-300 dark:border-none">
-					<div class="flex justify-center col-span-2 order-0 md:justify-start"><img src={workspace.logo}
-							class="w-20 h-20 rounded-full"></div>
-					<h1 class="order-2 text-xl font-bold md:order-3 col-span-full">{workspace.name}</h1>
-				</div>
-			</a>
-			))}
-		</div>
-	</WorkspaceLayout>
+  <WorkspaceLayout sidebar={{ showLogo: true }}>
+    <div class="grid w-full grid-cols-2 gap-3 lg:grid-cols-3 md:grid-cols-2">
+      <div class="col-span-full">
+        <h1 class="flex w-full gap-2 text-3xl font-bold">
+          <span class="w-10 h-10">👋</span> Welcome back,
+          {user.provider_data.username}!
+        </h1>
+        <h3 class="text-xl font-semibold">Here's your workspaces.</h3>
+      </div>
+      {workspaces.map((workspace) => (
+        <a class="w-full h-full" href={`/workspaces/${workspace.id}`}>
+          <div class="grid justify-center w-full h-full p-4 space-y-2 bg-white border border-gray-300 rounded-lg md:grid-cols-3 dark:bg-black-300 dark:border-none">
+            <div class="flex justify-center col-span-2 order-0 md:justify-start">
+              <img src={workspace.logo} class="w-20 h-20 rounded-full" />
+            </div>
+            <h1 class="order-2 text-xl font-bold md:order-3 col-span-full">
+              {workspace.name}
+            </h1>
+          </div>
+        </a>
+      ))}
+      <a class="w-full h-full" href="/new">
+        <div
+          class="grid justify-center w-full h-full p-4 space-y-2 bg-white border border-gray-300 rounded-lg md:grid-cols-3 dark:bg-black-300 dark:border-none"
+        >
+          <div class="flex justify-center col-span-2 order-0 md:justify-start">
+            <PlusCircleIcon className="w-20 h-20 col-span-1 rounded-full" />
+          </div>
+          <h1 class="order-2 text-xl font-bold md:order-3 col-span-full">
+            New Workspace
+          </h1>
+        </div>
+      </a>
+    </div>
+  </WorkspaceLayout>
 </GenericLayout>

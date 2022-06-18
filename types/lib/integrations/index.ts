@@ -1,3 +1,3 @@
-import * as RobloxTypes from './roblox';
+import * as RobloxTypes from "./roblox";
 
 export { RobloxTypes };

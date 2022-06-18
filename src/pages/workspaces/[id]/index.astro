@@ -1,0 +1,104 @@
+---
+import {
+  AnnotationIcon,
+  TerminalIcon,
+  UsersIcon,
+} from "@heroicons/react/solid";
+import GenericLayout from "../../../components/GenericLayout.astro";
+import WorkspaceStats from "../../../React/WorkspaceStats";
+import WorkspaceLayout from "../../../components/WorkspaceLayout.astro";
+import {
+  GetAnalytics,
+  GetWorkspace,
+  GetWorkspaceMemberCount,
+} from "../../../../utils/workspace";
+
+const { id } = Astro.params as { id: string };
+
+const workspace = await GetWorkspace(id, import.meta.env, Astro);
+const analytics = await GetAnalytics(workspace, import.meta.env, Astro);
+const members = await GetWorkspaceMemberCount(id, import.meta.env, Astro);
+---
+
+<GenericLayout>
+  <WorkspaceLayout sidebar={{ showLogo: false }}>
+    <h1 class="flex w-full gap-2 text-3xl font-bold">
+      <span class="w-10 h-10">👋</span> Hey there!
+    </h1>
+
+    <div class="grid w-full gap-4 pb-8 md:grid-cols-3">
+      <p class="text-2xl font-semibold col-span-full">
+        Here's this week's statistics:
+      </p>
+
+      <div
+        class="flex flex-col items-start justify-between w-full p-10 space-y-16 border border-gray-300 rounded-lg dark:bg-black-200 dark:border-none"
+      >
+        <div
+          class="flex items-center justify-center p-5 text-white rounded-full bg-pink"
+        >
+          <TerminalIcon className="w-5 h-5 text-white" />
+        </div><div>
+          <p class="text-lg font-semibold">Commands Ran</p><h1
+            class="text-4xl font-bold"
+          >
+            {analytics
+              ? Object.values(analytics[0].commands ?? {})
+                  .reduce((acc, curr) => acc + curr, 0)
+                  .toLocaleString()
+              : "N/A"}
+          </h1>
+        </div>
+      </div>
+
+      <div
+        class="flex flex-col items-start justify-between w-full p-10 space-y-16 border border-gray-300 rounded-lg dark:bg-black-200 dark:border-none"
+      >
+        <div
+          class="flex items-center justify-center p-5 text-white rounded-full bg-yellow"
+        >
+          <AnnotationIcon className="w-5 h-5 text-white" />
+        </div><div>
+          <p class="text-lg font-semibold">Messages</p><h1
+            class="text-4xl font-bold"
+          >
+            {analytics ? analytics[0].messages.toLocaleString() : "N/A"}
+          </h1>
+        </div>
+      </div>
+
+      <div
+        class="flex flex-col items-start justify-between w-full p-10 space-y-16 border border-gray-300 rounded-lg dark:bg-black-200 dark:border-none"
+      >
+        <div
+          class="flex items-center justify-center p-5 text-white rounded-full bg-ocean-green"
+        >
+          <UsersIcon className="w-5 h-5 text-white" />
+        </div><div>
+          <p class="text-lg font-semibold">Workspace Members</p><h1
+            class="text-4xl font-bold"
+          >
+            {members.toLocaleString()}
+          </h1>
+        </div>
+      </div>
+
+      <div
+        class="flex-col items-start justify-between hidden w-full space-y-16 border border-gray-300 rounded-lg lg:flex col-span-full dark:bg-black-200 dark:border-none"
+      >
+        {analytics ? (
+            <noscript class="w-full">
+                <p class="w-full p-10 text-2xl font-semibold text-center text-yellow">
+                    Javascript is needed for this chart!
+                </p>    
+            </noscript>
+          <WorkspaceStats client:only botAnalytics={analytics} />
+        ) : (
+          <p class="w-full p-10 text-2xl font-semibold text-center">
+            No Stats to Show!
+          </p>
+        )}
+      </div>
+    </div>
+  </WorkspaceLayout>
+</GenericLayout>

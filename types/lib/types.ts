@@ -66,6 +66,7 @@ export type Profile = {
   verified?: boolean;
   banner?: string;
   public?: boolean;
+  avatar_url?: string;
 
   // inserted data
   workspaces?: (Workspace & { role?: string })[] | string[];
@@ -236,6 +237,15 @@ export enum WorkspacePlan {
   Starter,
   Pro,
 }
+
+export type Plan = {
+  id: string;
+  name: string;
+  priceMonthly: string;
+  priceYearly: string;
+  limit: string;
+  enabled: boolean;
+};
 
 export type Workspace = {
   id: string;
