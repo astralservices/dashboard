@@ -1,9 +1,9 @@
 ---
 import { Profile, Workspace } from "../../types";
-import { UserIcon, CogIcon, LogoutIcon, ViewGridIcon, UsersIcon, PuzzleIcon, LightningBoltIcon, AdjustmentsIcon } from '@heroicons/react/outline'
+import { UserIcon, CogIcon, LogoutIcon, ViewGridIcon, UsersIcon, PuzzleIcon, LightningBoltIcon, AdjustmentsIcon } from '@heroicons/react/outline/esm/index.js'
 import { Actions, GetAllWorkspaces, GetUser, HasPermission } from "../../utils/user";
 import WorkspaceDropdownNoJs from './WorkspaceDropdown.astro'
-import WorkspaceDropdown from "../React/WorkspaceDropdown";
+import WorkspaceDropdown from "./React/WorkspaceDropdown";
 import { GetSelfWorkspaceMember, GetWorkspaceMembers } from "../../utils/workspace";
 
 export type WorkspaceSidebarProps = {
@@ -25,7 +25,7 @@ const currentWorkspace = Astro.params.id as string || null;
 
 const currentPage = Astro.canonicalURL.pathname
 
-const userMember = await GetSelfWorkspaceMember(currentWorkspace, import.meta.env, Astro);
+const userMember = currentWorkspace ? await GetSelfWorkspaceMember(currentWorkspace, import.meta.env, Astro) : null;
 ---
 
 <div>
@@ -205,7 +205,7 @@ const userMember = await GetSelfWorkspaceMember(currentWorkspace, import.meta.en
                 </noscript>
                 )}
                 <nav class="flex flex-col flex-1 px-2 mt-5 space-y-4">
-                    {!showLogo && (
+                    {!showLogo && userMember && (
                         <a href={`/workspaces/${currentWorkspace}`}
                             class:list={["dark:text-white text-black dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm font-bold rounded-lg transition-colors duration-100", { 'dark:bg-black-200': currentPage === `/workspaces/${currentWorkspace}/` } ]}
                         >
@@ -293,7 +293,7 @@ const userMember = await GetSelfWorkspaceMember(currentWorkspace, import.meta.en
                 </svg>
             </a>
         </div>
-        <main class="flex-1 min-h-screen dark:bg-black dark:text-white">
+        <main class="flex-1 min-h-screen dark:bg-black dark:text-white wrapper" id="swup">
             <div class="py-6">
                 <div class="flex flex-wrap px-12 pt-16 mx-auto space-y-10 max-w-7xl lg:px-36 md:px-24">
                     <slot />

@@ -3,9 +3,9 @@ import {
   AnnotationIcon,
   TerminalIcon,
   UsersIcon,
-} from "@heroicons/react/solid";
+} from "@heroicons/react/solid/esm/index.js";
 import GenericLayout from "../../../components/GenericLayout.astro";
-import WorkspaceStats from "../../../React/WorkspaceStats";
+import WorkspaceStats from "../../../Components/React/WorkspaceStats";
 import WorkspaceLayout from "../../../components/WorkspaceLayout.astro";
 import {
   GetAnalytics,
@@ -14,7 +14,6 @@ import {
 } from "../../../../utils/workspace";
 
 const { id } = Astro.params as { id: string };
-
 const workspace = await GetWorkspace(id, import.meta.env, Astro);
 const analytics = await GetAnalytics(workspace, import.meta.env, Astro);
 const members = await GetWorkspaceMemberCount(id, import.meta.env, Astro);
@@ -42,7 +41,7 @@ const members = await GetWorkspaceMemberCount(id, import.meta.env, Astro);
           <p class="text-lg font-semibold">Commands Ran</p><h1
             class="text-4xl font-bold"
           >
-            {analytics
+            {analytics && analytics[0].commands
               ? Object.values(analytics[0].commands ?? {})
                   .reduce((acc, curr) => acc + curr, 0)
                   .toLocaleString()
@@ -62,7 +61,7 @@ const members = await GetWorkspaceMemberCount(id, import.meta.env, Astro);
           <p class="text-lg font-semibold">Messages</p><h1
             class="text-4xl font-bold"
           >
-            {analytics ? analytics[0].messages.toLocaleString() : "N/A"}
+            {analytics && analytics[0].messages ? analytics[0].messages.toLocaleString() : "N/A"}
           </h1>
         </div>
       </div>

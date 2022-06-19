@@ -11,7 +11,7 @@ import {
   ScatterDataPoint,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import { BotAnalytics } from "../../types";
+import { BotAnalytics } from "../../../types";
 
 ChartJS.register(
   CategoryScale,
@@ -42,20 +42,20 @@ export default function WorkspaceStats({
             Object.values(a.commands ?? {}).reduce((acc, curr) => acc + curr, 0)
           )
           .reverse(),
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
-        borderColor: "rgba(255, 99, 132, 1)",
+        backgroundColor: "rgba(235, 12, 202, 0.2)",
+        borderColor: "rgba(235, 12, 202, 1)",
       },
       {
         label: "Messages",
         data: botAnalytics.map((a) => a.messages ?? 0).reverse(),
-        backgroundColor: "rgba(54, 162, 235, 0.2)",
-        borderColor: "rgba(54, 162, 235, 1)",
+        backgroundColor: "rgba(255, 194, 74, 0.2)",
+        borderColor: "rgba(255, 194, 74, 1)",
       },
       {
-        label: "Members",
+        label: "Server Members",
         data: botAnalytics.map((a) => a.members ?? 0).reverse(),
-        backgroundColor: "rgba(255, 206, 86, 0.2)",
-        borderColor: "rgba(255, 206, 86, 1)",
+        backgroundColor: "rgba(74, 186, 122, 0.2)",
+        borderColor: "rgba(74, 186, 122, 1)",
       },
     ],
   };

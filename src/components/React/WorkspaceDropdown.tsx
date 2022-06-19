@@ -1,9 +1,9 @@
 import { Fragment, useEffect, useState } from "react";
 import { Transition, Listbox } from "@headlessui/react";
-import { SelectorIcon, CheckIcon } from "@heroicons/react/outline";
-import { Workspace } from "../../types";
-import { PlusCircleIcon } from "@heroicons/react/solid";
-import { GetWorkspace, SetWorkspace } from "../../utils/user";
+import { SelectorIcon, CheckIcon } from "@heroicons/react/outline/esm/index.js";
+import { Workspace } from "../../../types";
+import { PlusCircleIcon } from "@heroicons/react/solid/esm/index.js";
+import { GetWorkspace, SetWorkspace } from "../../../utils/user";
 
 export default function WorkspaceDropdown({
   workspaces,
