@@ -1,0 +1,27 @@
+---
+import { GetUser } from "../../../../../utils/user";
+import BotLayout from "../../../../components/BotLayout.astro";
+
+const user = await GetUser(import.meta.env, Astro);
+
+if (!user) {
+  return Astro.redirect(
+    `${import.meta.env.PUBLIC_AUTH_URL}/?redirect=${Astro.canonicalURL}`
+  );
+}
+---
+
+<BotLayout>
+  <div class="w-full h-full px-2">
+    <div class="space-y-10">
+      <div class="grid w-full grid-cols-2 gap-7">
+        <div class="col-span-full">
+          <h1 class="flex w-full gap-2 text-2xl font-bold">General Settings</h1>
+          <p class="text-base font-semibold text-gray-800 dark:text-gray-300">
+            Configure your bot's token, prefix, region, and more.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</BotLayout>

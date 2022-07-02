@@ -1,0 +1,64 @@
+---
+import { SelectorIcon } from "@heroicons/react/solid/esm";
+
+const { name, data } = Astro.props as {
+  name: string;
+  data: { html: string; [key: string]: any };
+};
+---
+
+<div>
+  <div class="relative mt-1">
+    <a
+      href={`#dropdown-${name}`}
+      data-turbolinks="false"
+      class="relative flex w-full py-2 pl-3 pr-10 text-left bg-white border border-gray-300 rounded-md shadow-sm cursor-default peer dark:border-none dark:bg-black-300 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+      aria-haspopup="listbox"
+      aria-expanded="true"
+      aria-labelledby="listbox-label"
+    >
+      <span class="flex items-center">
+        {Astro.slots.has("current") ? (
+          <slot name="current" />
+        ) : (
+          <p class="text-gray-500">Select...</p>
+        )}
+      </span>
+      <span
+        class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"
+      >
+        <SelectorIcon className="w-5 h-5 text-gray-500" />
+      </span>
+    </a>
+
+    <ul
+      class="absolute z-10 hidden w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg dark:shadow-none dark:text-white dark:bg-black-300 target:block max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+      tabindex={-1}
+      id={`dropdown-${name}`}
+      role="listbox"
+      aria-labelledby="listbox-label"
+      aria-activedescendant="listbox-option-3"
+    >
+      {data.map((d, i) => (
+        <label for={d.id} id={`listbox-option-${i}`}>
+          <input
+            type="radio"
+            name={name}
+            value={d.id}
+            id={d.id}
+            hidden
+            class="hidden peer"
+          />
+          <a
+            data-turbolinks="false"
+            class="relative flex w-full py-2 pl-3 text-gray-900 cursor-pointer select-none group hover:bg-astral-300 peer-checked:bg-astral-400 dark:text-white pr-9"
+          >
+            <div class="flex items-center">
+              <Fragment set:html={d.html} />
+            </div>
+          </a>
+        </label>
+      ))}
+    </ul>
+  </div>
+</div>

@@ -400,6 +400,7 @@ export type Region = {
   lat?: number;
   long?: number;
   maxBots: number;
+  bots?: number;
   status: "online" | "offline";
 };
 

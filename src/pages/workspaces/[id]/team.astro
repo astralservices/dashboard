@@ -9,9 +9,13 @@ import WorkspaceLayout from "../../../components/WorkspaceLayout.astro";
 
 const { id } = Astro.params as { id: string };
 
-const members = await GetWorkspaceMembers(id, import.meta.env, Astro);
+const user = await GetUser(import.meta.env, Astro);
 
-const user = await GetUser(import.meta.env, Astro)
+if (!user) {
+  return Astro.redirect(`${import.meta.env.PUBLIC_AUTH_URL}/?redirect=${Astro.canonicalURL}`);
+}
+
+const members = await GetWorkspaceMembers(id, import.meta.env, Astro);
 
 const userMember = members.find(member => (member.profile as Profile).id === user.id);
 ---

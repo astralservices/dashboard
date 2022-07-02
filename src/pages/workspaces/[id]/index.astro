@@ -12,11 +12,19 @@ import {
   GetWorkspace,
   GetWorkspaceMemberCount,
 } from "../../../../utils/workspace";
+import { GetUser } from "../../../../utils/user";
+
+const user = await GetUser(import.meta.env, Astro);
+
+if (!user) {
+  return Astro.redirect(`${import.meta.env.PUBLIC_AUTH_URL}/?redirect=${Astro.canonicalURL}`);
+}
 
 const { id } = Astro.params as { id: string };
 const workspace = await GetWorkspace(id, import.meta.env, Astro);
 const analytics = await GetAnalytics(workspace, import.meta.env, Astro);
 const members = await GetWorkspaceMemberCount(id, import.meta.env, Astro);
+
 ---
 
 <GenericLayout>
@@ -41,7 +49,7 @@ const members = await GetWorkspaceMemberCount(id, import.meta.env, Astro);
           <p class="text-lg font-semibold">Commands Ran</p><h1
             class="text-4xl font-bold"
           >
-            {analytics && analytics[0].commands
+            {analytics
               ? Object.values(analytics[0].commands ?? {})
                   .reduce((acc, curr) => acc + curr, 0)
                   .toLocaleString()

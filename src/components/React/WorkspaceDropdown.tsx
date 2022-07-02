@@ -60,9 +60,11 @@ export default function WorkspaceDropdown({
                 workspaces.map((workspace, i) => (
                   <Listbox.Option
                     key={i}
+                    as="a"
+                    href={`/workspaces/${workspace.id}`}
                     className={({ active }) =>
-                      `cursor-default select-none relative py-2 px-4 dark:text-white text-black ${
-                        active && "dark:bg-black-200 bg-gray-200"
+                      `cursor-default flex select-none relative py-2 px-4 dark:text-white text-black ${
+                        active && "dark:bg-black-300 bg-gray-200"
                       }`
                     }
                     value={workspace}
@@ -98,8 +100,10 @@ export default function WorkspaceDropdown({
                 ))}
 
               <Listbox.Option
+                as="a"
+                href="/new"
                 className={({ active }) =>
-                  `cursor-default select-none relative py-2 px-4 dark:text-white text-black ${
+                  `cursor-default flex select-none relative py-2 px-4 dark:text-white text-black ${
                     active && "dark:bg-black-300 bg-gray-200"
                   }`
                 }

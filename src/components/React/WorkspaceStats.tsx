@@ -28,32 +28,31 @@ export default function WorkspaceStats({
 }: {
   botAnalytics: BotAnalytics[];
 }) {
-  botAnalytics
-    .map((a) => new Date(a.timestamp).toLocaleDateString())
-    .reverse() ?? [];
+  // sort botAnalytics by timestamp, newest last
+  botAnalytics = botAnalytics.sort((a, b) => {
+    return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
+  });
 
   const dataSet = {
     labels: botAnalytics.map((a) => new Date(a.timestamp).toLocaleDateString()),
     datasets: [
       {
         label: "Commands",
-        data: botAnalytics
-          .map((a) =>
-            Object.values(a.commands ?? {}).reduce((acc, curr) => acc + curr, 0)
-          )
-          .reverse(),
+        data: botAnalytics.map((a) =>
+          Object.values(a.commands ?? {}).reduce((acc, curr) => acc + curr, 0)
+        ),
         backgroundColor: "rgba(235, 12, 202, 0.2)",
         borderColor: "rgba(235, 12, 202, 1)",
       },
       {
         label: "Messages",
-        data: botAnalytics.map((a) => a.messages ?? 0).reverse(),
+        data: botAnalytics.map((a) => a.messages ?? 0),
         backgroundColor: "rgba(255, 194, 74, 0.2)",
         borderColor: "rgba(255, 194, 74, 1)",
       },
       {
         label: "Server Members",
-        data: botAnalytics.map((a) => a.members ?? 0).reverse(),
+        data: botAnalytics.map((a) => a.members ?? 0),
         backgroundColor: "rgba(74, 186, 122, 0.2)",
         borderColor: "rgba(74, 186, 122, 1)",
       },

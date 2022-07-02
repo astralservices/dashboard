@@ -1,7 +1,16 @@
 ---
+import { GetUser } from "../../utils/user";
 import { GetPlans } from "../../utils/workspace";
 import GenericLayout from "../components/GenericLayout.astro";
 import WorkspaceLayout from "../components/WorkspaceLayout.astro";
+
+const user = await GetUser(import.meta.env, Astro);
+
+if (!user) {
+  return Astro.redirect(
+    `${import.meta.env.PUBLIC_AUTH_URL}/?redirect=${Astro.canonicalURL}`
+  );
+}
 
 const plans = await GetPlans(import.meta.env, Astro);
 ---

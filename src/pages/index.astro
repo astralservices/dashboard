@@ -1,11 +1,18 @@
 ---
-import { PlusCircleIcon } from "@heroicons/react/solid/esm/index.js";
+import { PlusCircleIcon } from "@heroicons/react/solid";
 import { GetAllWorkspaces, GetUser } from "../../utils/user";
 import GenericLayout from "../components/GenericLayout.astro";
 import WorkspaceLayout from "../components/WorkspaceLayout.astro";
 
-const workspaces = await GetAllWorkspaces(import.meta.env, Astro);
 const user = await GetUser(import.meta.env, Astro);
+
+if (!user) {
+  return Astro.redirect(
+    `${import.meta.env.PUBLIC_AUTH_URL}/?redirect=${Astro.canonicalURL}`
+  );
+}
+
+const workspaces = await GetAllWorkspaces(import.meta.env, Astro);
 ---
 
 <GenericLayout>

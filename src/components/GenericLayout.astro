@@ -1,4 +1,6 @@
 ---
+import "../styles/global.css";
+import Prefetch from "@julian_cataldo/astro-prefetch/Prefetch.astro";
 ---
 
 <html lang="en">
@@ -11,51 +13,10 @@
 
     <link rel="icon" href="/img/IconMeshed.svg" type="image/x-icon" />
 
-    <script src="https://unpkg.com/swup@latest/dist/swup.min.js">
-
-    </script>
-
-    <script
-      src="https://unpkg.com/@swup/a11y-plugin@2.0.0/dist/SwupA11yPlugin.min.js"
-    >
-
-    </script>
-
-    <script
-      src="https://unpkg.com/@swup/head-plugin@1.2.0/dist/SwupHeadPlugin.min.js"
-    >
-
-    </script>
-
-    <script
-      src="https://unpkg.com/@swup/fade-theme@1.0.5/dist/SwupFadeTheme.min.js"
-    >
-
-    </script>
-
-    <script
-      src="https://unpkg.com/@swup/preload-plugin@1.0.3/dist/SwupPreloadPlugin.min.js"
-    >
-
-    </script>
-
-    <script src="https://unpkg.com/@swup/preload-plugin@1.0.3/lib/index.js">
-
-    </script>
-
-    <script>
-      const swup = new Swup({
-        plugins: [
-          new SwupA11yPlugin(),
-          new SwupHeadPlugin(),
-          new SwupFadeTheme(),
-          new SwupPreloadPlugin(),
-        ],
-      });
-    </script>
+    <Prefetch max={8} />
   </head>
 
-  <body>
+  <body class="bg-white dark:bg-black">
     <noscript>
       <p
         class="absolute z-50 w-full p-3 font-bold text-center text-black bg-amber-500"

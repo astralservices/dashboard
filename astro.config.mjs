@@ -12,5 +12,5 @@ export default defineConfig({
   adapter: deno({
     port: 5000,
   }),
-  integrations: [react(), tailwind()],
+  integrations: [react(), tailwind(), turbolinks(), partytown()],
 });

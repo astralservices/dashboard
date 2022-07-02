@@ -13,12 +13,6 @@ export type WorkspaceSidebarProps = {
 
 const { showLogo } = Astro.props as WorkspaceSidebarProps;
 
-const user = await GetUser(import.meta.env, Astro);
-
-if (!user) {
-    return Astro.redirect(import.meta.env.PUBLIC_AUTH_URL)
-}
-
 const workspaces = await GetAllWorkspaces(import.meta.env, Astro);
 
 const currentWorkspace = Astro.params.id as string || null;
@@ -26,6 +20,7 @@ const currentWorkspace = Astro.params.id as string || null;
 const currentPage = Astro.canonicalURL.pathname
 
 const userMember = currentWorkspace ? await GetSelfWorkspaceMember(currentWorkspace, import.meta.env, Astro) : null;
+const user = await GetUser(import.meta.env, Astro);
 ---
 
 <div>
@@ -42,7 +37,7 @@ const userMember = currentWorkspace ? await GetSelfWorkspaceMember(currentWorksp
           To: "opacity-0"
       -->
         <div
-            class="fixed inset-0 hidden transition-opacity duration-300 ease-linear bg-gray-600 bg-opacity-75 opacity-0 group-target:opacity-100 group-target:block">
+            class="fixed inset-0 hidden transition-opacity duration-300 ease-linear bg-opacity-75 opacity-0 dark:bg-black-200 group-target:opacity-100 group-target:block">
         </div>
 
         <div
@@ -58,7 +53,7 @@ const userMember = currentWorkspace ? await GetSelfWorkspaceMember(currentWorksp
             To: "-translate-x-full"
         -->
             <div
-                class="relative flex flex-col flex-1 w-full max-w-xs duration-300 ease-in-out bg-gray-800 opacity-0 group-target:opacity-100">
+                class="relative flex flex-col flex-1 w-full max-w-xs duration-300 ease-in-out opacity-0 dark:bg-black group-target:opacity-100">
                 <!--
             Close button, show/hide based on off-canvas menu state.
   
@@ -83,104 +78,92 @@ const userMember = currentWorkspace ? await GetSelfWorkspaceMember(currentWorksp
 
                 <div class="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
                     <div class="flex items-center flex-shrink-0 px-4">
-                        <img class="w-auto h-8"
-                            src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg"
-                            alt="Workflow">
+                        {showLogo ? (
+                            <a class="flex items-center justify-center" href="/">
+                                <img class="w-3/4" src="/img/LogotypeDark.png" alt="Astral Logotype">
+                            </a>
+                            ) : (
+                            <WorkspaceDropdown workspaces={workspaces} client:only />
+                            <noscript>
+                                <WorkspaceDropdownNoJs workspaces={workspaces} />
+                            </noscript>
+                            )}
                     </div>
                     <nav class="px-2 mt-5 space-y-1">
-                        <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                        <a href="#"
-                            class="flex items-center px-2 py-2 text-base font-medium text-white bg-gray-900 rounded-md group">
-                            <!--
-                  Heroicon name: outline/home
-  
-                  Current: "text-gray-300", Default: "text-gray-400 group-hover:text-gray-300"
-                -->
-                            <svg class="flex-shrink-0 w-6 h-6 mr-4 text-gray-300" xmlns="http://www.w3.org/2000/svg"
-                                fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                            </svg>
+                        {!showLogo && userMember && (
+                        <a href={`/workspaces/${currentWorkspace}`}
+                            class:list={["dark:text-white text-black dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm font-bold rounded-lg transition-colors duration-100", { 'dark:bg-black-200': currentPage === `/workspaces/${currentWorkspace}/` } ]}
+                        >
+                            <ViewGridIcon className="w-6 h-6 mr-3" />
                             Dashboard
                         </a>
 
-                        <a href="#"
-                            class="flex items-center px-2 py-2 text-base font-medium text-gray-300 rounded-md hover:bg-gray-700 hover:text-white group">
-                            <!-- Heroicon name: outline/users -->
-                            <svg class="flex-shrink-0 w-6 h-6 mr-4 text-gray-400 group-hover:text-gray-300"
-                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                                stroke="currentColor" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                            </svg>
+                        <a href={`/workspaces/${currentWorkspace}/bot`}
+                            class:list={["dark:text-white text-black dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm font-bold rounded-lg transition-colors duration-100", { 'dark:bg-black-200': (currentPage === `/workspaces/${currentWorkspace}/bot/` || currentPage.includes('bot')) } ]}
+                        >
+                            <LightningBoltIcon className="w-6 h-6 mr-3" />
+                            Discord Bot
+                        </a>
+
+                        <a href={`/workspaces/${currentWorkspace}/team`}
+                            class:list={["dark:text-white text-black dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm font-bold rounded-lg transition-colors duration-100", { 'dark:bg-black-200': currentPage === `/workspaces/${currentWorkspace}/team/` } ]}
+                        >
+                            <UsersIcon className="w-6 h-6 mr-3" />
                             Team
                         </a>
 
-                        <a href="#"
-                            class="flex items-center px-2 py-2 text-base font-medium text-gray-300 rounded-md hover:bg-gray-700 hover:text-white group">
-                            <!-- Heroicon name: outline/folder -->
-                            <svg class="flex-shrink-0 w-6 h-6 mr-4 text-gray-400 group-hover:text-gray-300"
-                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                                stroke="currentColor" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
-                            </svg>
-                            Projects
+                        <a href={`/workspaces/${currentWorkspace}/integrations`}
+                            class:list={["dark:text-white text-black dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm font-bold rounded-lg transition-colors duration-100", { 'dark:bg-black-200': currentPage === `/workspaces/${currentWorkspace}/integrations/` } ]}
+                        >
+                            <PuzzleIcon className="w-6 h-6 mr-3" />
+                            Integrations
                         </a>
 
-                        <a href="#"
-                            class="flex items-center px-2 py-2 text-base font-medium text-gray-300 rounded-md hover:bg-gray-700 hover:text-white group">
-                            <!-- Heroicon name: outline/calendar -->
-                            <svg class="flex-shrink-0 w-6 h-6 mr-4 text-gray-400 group-hover:text-gray-300"
-                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                                stroke="currentColor" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            Calendar
-                        </a>
-
-                        <a href="#"
-                            class="flex items-center px-2 py-2 text-base font-medium text-gray-300 rounded-md hover:bg-gray-700 hover:text-white group">
-                            <!-- Heroicon name: outline/inbox -->
-                            <svg class="flex-shrink-0 w-6 h-6 mr-4 text-gray-400 group-hover:text-gray-300"
-                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                                stroke="currentColor" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-                            </svg>
-                            Documents
-                        </a>
-
-                        <a href="#"
-                            class="flex items-center px-2 py-2 text-base font-medium text-gray-300 rounded-md hover:bg-gray-700 hover:text-white group">
-                            <!-- Heroicon name: outline/chart-bar -->
-                            <svg class="flex-shrink-0 w-6 h-6 mr-4 text-gray-400 group-hover:text-gray-300"
-                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                                stroke="currentColor" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                            </svg>
-                            Reports
-                        </a>
+                        <>
+                            {HasPermission(userMember, Actions.UPDATE_WORKSPACE) && (
+                                <a href={`/workspaces/${currentWorkspace}/settings`}
+                                class:list={["dark:text-white text-black dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm font-bold rounded-lg transition-colors duration-100", { 'dark:bg-black-200': currentPage === `/workspaces/${currentWorkspace}/settings/` } ]}
+                            >
+                                <AdjustmentsIcon className="w-6 h-6 mr-3" />
+                                Settings
+                            </a>
+                            )}
+                        </>
+                    )}
                     </nav>
                 </div>
-                <div class="flex flex-shrink-0 p-4 bg-gray-700">
-                    <a href="#" class="flex-shrink-0 block group">
-                        <div class="flex items-center">
-                            <div>
-                                <img class="inline-block w-10 h-10 rounded-full"
-                                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                    alt="">
-                            </div>
-                            <div class="ml-3">
-                                <p class="text-base font-medium text-white">Tom Cook</p>
-                                <p class="text-sm font-medium text-gray-400 group-hover:text-gray-300">View profile</p>
-                            </div>
-                        </div>
+                <div class="flex-shrink-0 p-4 space-y-4">
+                    <a href="#"
+                        class="dark:text-white text-black dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm font-bold rounded-lg transition-colors duration-100">
+                        <UserIcon className="w-5 h-5 mr-2" />
+                        Profile
                     </a>
+                    <a href="#"
+                        class="dark:text-white text-black dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm font-bold rounded-lg transition-colors duration-100">
+                        <CogIcon className="w-5 h-5 mr-2" />
+                        Account Settings
+                    </a>
+                    <form action={`${import.meta.env.PUBLIC_API_ENDPOINT}/api/v1/auth/logout/discord`} class="w-full">
+                        <input hidden readonly name="redirect" value={Astro.site} />
+                        <button type="submit"
+                            class="dark:text-white text-black dark:hover:bg-black-200 w-full hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm font-bold rounded-lg transition-colors duration-100">
+                            <LogoutIcon className="w-5 h-5 mr-2" />
+                            Logout
+                        </button>
+                    </form>
+
+                    <div class="grid grid-cols-5 align-middle">
+                        <div class="col-span-1">
+                            <img class="w-12 h-12 rounded-full" src={user.provider_avatar_url} />
+                        </div>
+                        <div class="grid items-center col-span-3 pl-4 align-middle">
+                            <div class="text-sm font-bold text-black dark:text-white">{user.provider_data.username}
+                            </div>
+                            <div class="text-xs font-medium text-black dark:text-white">{user.provider_data.email}</div>
+                        </div>
+                    </div>
                 </div>
+
             </div>
 
             <div class="flex-shrink-0 w-14">
@@ -214,21 +197,21 @@ const userMember = currentWorkspace ? await GetSelfWorkspaceMember(currentWorksp
                         </a>
 
                         <a href={`/workspaces/${currentWorkspace}/bot`}
-                            class:list={["dark:text-white text-black dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm font-bold rounded-lg transition-colors duration-100", { 'dark:bg-black-200': currentPage === `/workspaces/${currentWorkspace}/team` } ]}
+                            class:list={["dark:text-white text-black dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm font-bold rounded-lg transition-colors duration-100", { 'dark:bg-black-200': (currentPage === `/workspaces/${currentWorkspace}/bot/` || currentPage.includes('bot')) } ]}
                         >
                             <LightningBoltIcon className="w-6 h-6 mr-3" />
                             Discord Bot
                         </a>
 
                         <a href={`/workspaces/${currentWorkspace}/team`}
-                            class:list={["dark:text-white text-black dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm font-bold rounded-lg transition-colors duration-100", { 'dark:bg-black-200': currentPage === `/workspaces/${currentWorkspace}/team` } ]}
+                            class:list={["dark:text-white text-black dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm font-bold rounded-lg transition-colors duration-100", { 'dark:bg-black-200': currentPage === `/workspaces/${currentWorkspace}/team/` } ]}
                         >
                             <UsersIcon className="w-6 h-6 mr-3" />
                             Team
                         </a>
 
                         <a href={`/workspaces/${currentWorkspace}/integrations`}
-                            class:list={["dark:text-white text-black dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm font-bold rounded-lg transition-colors duration-100", { 'dark:bg-black-200': currentPage === `/workspaces/${currentWorkspace}/integrations` } ]}
+                            class:list={["dark:text-white text-black dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm font-bold rounded-lg transition-colors duration-100", { 'dark:bg-black-200': currentPage === `/workspaces/${currentWorkspace}/integrations/` } ]}
                         >
                             <PuzzleIcon className="w-6 h-6 mr-3" />
                             Integrations
@@ -237,7 +220,7 @@ const userMember = currentWorkspace ? await GetSelfWorkspaceMember(currentWorksp
                         <>
                             {HasPermission(userMember, Actions.UPDATE_WORKSPACE) && (
                                 <a href={`/workspaces/${currentWorkspace}/settings`}
-                                class:list={["dark:text-white text-black dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm font-bold rounded-lg transition-colors duration-100", { 'dark:bg-black-200': currentPage === `/workspaces/${currentWorkspace}/team` } ]}
+                                class:list={["dark:text-white text-black dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm font-bold rounded-lg transition-colors duration-100", { 'dark:bg-black-200': currentPage === `/workspaces/${currentWorkspace}/settings/` } ]}
                             >
                                 <AdjustmentsIcon className="w-6 h-6 mr-3" />
                                 Settings
@@ -282,9 +265,9 @@ const userMember = currentWorkspace ? await GetSelfWorkspaceMember(currentWorksp
         </div>
     </div>
     <div class="flex flex-col flex-1 md:pl-80">
-        <div class="sticky top-0 z-10 pt-1 pl-1 bg-gray-100 md:hidden sm:pl-3 sm:pt-3">
+        <div class="sticky top-0 z-10 pt-1 pl-1 bg-gray-100 dark:bg-black-200 md:hidden sm:pl-3 sm:pt-3">
             <a href="#sidebar" data-turbolinks="false"
-                class="-ml-0.5 -mt-0.5 h-12 w-12 inline-flex items-center justify-center rounded-md text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                class="-ml-0.5 -mt-0.5 h-12 w-12 inline-flex items-center justify-center rounded-md text-black-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
                 <span class="sr-only">Open sidebar</span>
                 <!-- Heroicon name: outline/menu -->
                 <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"

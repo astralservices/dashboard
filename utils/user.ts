@@ -109,7 +109,7 @@ export async function GetAllWorkspaces(
 }
 
 export function SetWorkspace(workspace: Workspace): void {
-  window.location.href = `/workspaces/${workspace.id}`;
+  // window.location.href = `/workspaces/${workspace.id}`;
   localStorage.setItem("workspace", JSON.stringify(workspace));
 }
 
