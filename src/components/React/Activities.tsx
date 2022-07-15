@@ -26,6 +26,18 @@ function BotActivity({
 
   return (
     <li key={activity.name}>
+      <input
+        type="hidden"
+        className="hidden"
+        name={`settings.activities[${index}][name]`}
+        value={activity.name}
+      />
+      <input
+        type="hidden"
+        className="hidden"
+        name={`settings.activities[${index}][type]`}
+        value={activity.type}
+      />
       <div className="block">
         <div className="flex items-center px-4 py-4 sm:px-6">
           <div className="flex-1 min-w-0 sm:flex sm:items-center sm:justify-between">
@@ -335,7 +347,12 @@ export default function Activities({ bot }: { bot: Bot }) {
         className="border border-gray-200 divide-y divide-gray-200 rounded-md dark:border-none dark:divide-black-200 dark:bg-black-300"
       >
         {botData.settings.activities.map((activity, i) => (
-          <BotActivity index={i} activity={activity} setBotData={setBotData} />
+          <BotActivity
+            index={i}
+            activity={activity}
+            key={i}
+            setBotData={setBotData}
+          />
         ))}
         <li>
           <button
@@ -367,6 +384,15 @@ export default function Activities({ bot }: { bot: Bot }) {
           </button>
         </li>
       </ul>
+
+      <noscript>
+        <div className="mt-1">
+          <p className="text-sm text-black-700">
+            You must enable Javascript to edit your bot's activites. You can
+            also contact support to change it for you.
+          </p>
+        </div>
+      </noscript>
     </div>
   );
 }

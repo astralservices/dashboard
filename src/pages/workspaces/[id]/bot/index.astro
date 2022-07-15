@@ -11,6 +11,7 @@ import RegionPingChecker from "../../../../components/React/RegionPingChecker";
 import { GetBotForWorkspace } from "../../../../../utils/bot";
 import { GetWorkspace } from "../../../../../utils/workspace";
 import Activities from "../../../../components/React/Activities";
+import Switch from "../../../../components/Switch.astro";
 
 const user = await GetUser(import.meta.env, Astro);
 
@@ -76,9 +77,15 @@ const statuses = ["online", "invisible", "idle", "dnd"].map((status) => ({
   ...botStatus(status),
   value: status,
 }));
+
+if (!bot) {
+  return Astro.redirect(`/workspaces/${workspaceId}/bot/create`);
+}
+
+const currentRegion = regions.find((r) => r.id === bot.region);
 ---
 
-<BotLayout bot={bot}>
+<BotLayout bot={bot} showSave={true}>
   <script is:inline>
     var tokenVisible = false;
 
@@ -135,7 +142,7 @@ const statuses = ["online", "invisible", "idle", "dnd"].map((status) => ({
               <div class="relative flex items-stretch flex-grow focus-within:z-10">
                 <input
                   type="text"
-                  name="prefix"
+                  name="settings.prefix"
                   id="prefix"
                   required
                   class="block w-full border-gray-300 rounded-md dark:border-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-black-300 sm:text-sm"
@@ -146,16 +153,28 @@ const statuses = ["online", "invisible", "idle", "dnd"].map((status) => ({
             </div>
           </div>
 
-          <div class="md:col-span-1 col-span-full">
+          <div class="md:col-span-1 col-span-full ">
             <label class="text-sm font-semibold">Region</label>
-            <div class="mt-1">
+            <div class="grid grid-cols-4 mt-1 gap-x-2">
               <a
-                class="flex justify-center w-full px-3 py-2 text-sm font-semibold text-center text-white rounded-md bg-astral"
+                class="flex justify-center w-full col-span-2 px-3 py-2 text-sm font-semibold text-center text-white rounded-md bg-astral"
                 href="#region-modal"
                 data-turbolinks="false"
               >
                 Select Region
               </a>
+
+              <div class="flex items-center justify-end col-span-2 space-x-2">
+                <img
+                  draggable="false"
+                  class="w-6 h-6"
+                  alt={currentRegion.prettyName}
+                  src={parse(currentRegion.flag)[0].url}
+                />
+                <p class="text-sm font-semibold text-gray-800 dark:text-white">
+                  {currentRegion.prettyName}
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -169,39 +188,59 @@ const statuses = ["online", "invisible", "idle", "dnd"].map((status) => ({
           </div>
           <div class="col-span-full">
             <label class="text-sm font-semibold">Status</label>
-            <div class="mt-1">
+            <div class="grid grid-cols-3 mt-1">
               <a
-                class="flex justify-center w-full px-3 py-2 text-sm font-semibold text-center text-white rounded-md bg-astral"
+                class="flex justify-center w-full col-span-2 px-3 py-2 text-sm font-semibold text-center text-white rounded-md bg-astral"
                 href="#status-modal"
                 data-turbolinks="false"
               >
                 Select Status
               </a>
+              <div class="flex items-center justify-end space-x-2">
+                <div
+                  class:list={[
+                    "w-4 h-4 flex items-center justify-center rounded-full",
+                    botStatus(bot.settings.status).color,
+                  ]}
+                >
+                  <span
+                    class:list={[
+                      "rounded-full w-2 h-2",
+                      botStatus(bot.settings.status).dark,
+                    ]}
+                  />
+                </div>
+                <p class="text-sm font-semibold text-gray-800 dark:text-white">
+                  {botStatus(bot.settings.status).label}
+                </p>
+              </div>
             </div>
           </div>
 
-          <Activities bot={bot} client:only />
+          <Activities bot={bot} client:load />
 
-          <noscript class="col-span-full">
-            <label class="text-sm font-semibold">Activities</label>
-            <div class="mt-1">
-              <p>
-                You must enable Javascript to edit your bot's activites. You can
-                also contact support to change it for you.
-              </p>
+          <div class="col-span-1">
+            <label class="text-sm font-semibold">Randomize Order</label>
+            <div class="flex mt-1 rounded-md">
+              <Switch
+                checked={bot.settings.randomizeActivities}
+                name="settings.randomizeActivities"
+              />
             </div>
-          </noscript>
+          </div>
 
-          <div class="md:col-span-1 col-span-full">
-            <label class="text-sm font-semibold">Region</label>
-            <div class="mt-1">
-              <a
-                class="flex justify-center w-full px-3 py-2 text-sm font-semibold text-center text-white rounded-md bg-astral"
-                href="#region-modal"
-                data-turbolinks="false"
-              >
-                Select Region
-              </a>
+          <div class="col-span-1">
+            <label class="text-sm font-semibold">Frequency (in seconds)</label>
+            <div class="flex mt-1 rounded-md">
+              <input
+                type="number"
+                name="settings.activityInterval"
+                id="frequency"
+                required
+                class="block w-full border-gray-300 rounded-md dark:border-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-black-200 sm:text-sm"
+                placeholder="300"
+                value={bot.settings.activityInterval}
+              />
             </div>
           </div>
         </div>
@@ -222,6 +261,7 @@ const statuses = ["online", "invisible", "idle", "dnd"].map((status) => ({
                 hidden
                 class="hidden peer"
                 checked={bot.region === region.id}
+                value={region.id}
               />
               <div
                 class:list={[
@@ -280,11 +320,12 @@ const statuses = ["online", "invisible", "idle", "dnd"].map((status) => ({
             <label for={status.value} class="cursor-pointer">
               <input
                 type="radio"
-                name="status"
+                name="settings.status"
                 id={status.value}
                 hidden
                 class="hidden peer"
                 checked={bot.settings.status === status.value}
+                value={status.value}
               />
               <div
                 class:list={[

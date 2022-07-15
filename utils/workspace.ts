@@ -3,8 +3,10 @@ import {
   APIResponse,
   BotAnalytics,
   DiscordUserInfo,
+  Integration,
   Plan,
   Workspace,
+  WorkspaceIntegration,
   WorkspaceMember,
   WorkspacePlan,
 } from "../types";
@@ -159,6 +161,59 @@ export async function GetAnalytics(
         ? import.meta.env.PUBLIC_API_ENDPOINT
         : "http://127.0.0.1:3000"
     }/api/v1/workspaces/${workspace.id}/analytics`,
+    {
+      headers: Astro.request.headers,
+    }
+  )
+    .then((res) => res.json())
+    .catch((err) => console.error(err));
+
+  if (data.error) {
+    console.error(data.error);
+    return null;
+  }
+
+  return data.result;
+}
+
+export async function GetWorkspaceIntegrations(
+  workspace: Workspace,
+  env: Record<string, string>,
+  Astro: AstroGlobal
+): Promise<WorkspaceIntegration[] | null> {
+  const data: APIResponse<WorkspaceIntegration[] | null> = await fetch(
+    `${
+      env.SECRET_NODE_ENV === "production"
+        ? import.meta.env.PUBLIC_API_ENDPOINT
+        : "http://127.0.0.1:3000"
+    }/api/v1/workspaces/${workspace.id}/integrations`,
+    {
+      headers: Astro.request.headers,
+    }
+  )
+    .then((res) => res.json())
+    .catch((err) => console.error(err));
+
+  if (data.error) {
+    console.error(data.error);
+    return null;
+  }
+
+  return data.result;
+}
+
+export async function GetWorkspaceIntegration(
+  workspace: Workspace,
+  id: string,
+  env: Record<string, string>,
+  Astro: AstroGlobal
+): Promise<WorkspaceIntegration | null> {
+  const data: APIResponse<WorkspaceIntegration | null> = await fetch(
+    `${
+      env.SECRET_NODE_ENV === "production"
+        ? import.meta.env.PUBLIC_API_ENDPOINT
+        : "http://127.0.0.1:3000"
+    }/api/v1/workspaces/${workspace.id}/integrations/${id}`,
     {
       headers: Astro.request.headers,
     }

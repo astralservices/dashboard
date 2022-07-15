@@ -1,6 +1,10 @@
 ---
+import { DiscordAPIError, GuildChannel } from "discord.js";
+import { GetBotForWorkspace } from "../../../../../utils/bot";
 import { GetUser } from "../../../../../utils/user";
+import { GetWorkspace } from "../../../../../utils/workspace";
 import BotLayout from "../../../../components/BotLayout.astro";
+import Switch from "../../../../components/Switch.astro";
 
 const user = await GetUser(import.meta.env, Astro);
 
@@ -9,19 +13,133 @@ if (!user) {
     `${import.meta.env.PUBLIC_AUTH_URL}/?redirect=${Astro.canonicalURL}`
   );
 }
+
+const workspaceId = Astro.params.id as string;
+const workspace = await GetWorkspace(workspaceId, import.meta.env, Astro);
+const bot = await GetBotForWorkspace(workspace, import.meta.env, Astro);
+
+if (!bot) {
+  return Astro.redirect(`/workspaces/${workspaceId}/bot/create`);
+}
+
+const channels: GuildChannel[] | DiscordAPIError = await fetch(
+  `https://discord.com/api/v9/guilds/${bot.settings.guild}/channels`,
+  {
+    method: "GET",
+    headers: {
+      Authorization: `Bot ${bot.token}`,
+      "Content-Type": "application/json",
+    },
+  }
+)
+  .then((res) => res.json())
+  .then((x) => x.filter((c) => c.type === 0));
 ---
 
-<BotLayout>
+<BotLayout showSave={true} bot={bot}>
   <div class="w-full h-full px-2">
-    <div class="space-y-10">
-      <div class="grid w-full grid-cols-2 gap-7">
-        <div class="col-span-full">
-          <h1 class="flex w-full gap-2 text-2xl font-bold">General Settings</h1>
-          <p class="text-base font-semibold text-gray-800 dark:text-gray-300">
-            Configure your bot's token, prefix, region, and more.
-          </p>
+    {bot ? (
+      <div class="space-y-10">
+        <div class="grid w-full grid-cols-2 gap-7">
+          <div class="col-span-full">
+            <h1 class="flex w-full gap-2 text-2xl font-bold">Modules</h1>
+            <p class="text-base font-semibold text-gray-800 dark:text-gray-300">
+              Enable or disable certain command categories.
+            </p>
+          </div>
+          <div class="col-span-full">
+            <dl class="space-y-6 divide-y divide-gray-200">
+              <div class="pt-6 divide-y divide-black-500">
+                <dt class="p-4 text-lg odd:bg-black-200 even:bg-black-300">
+                  <a
+                    href="#fun"
+                    data-turbolinks="false"
+                    class="flex items-start justify-between w-full text-left text-gray-400"
+                  >
+                    <span class="font-medium text-gray-900 dark:text-white">
+                      Fun
+                    </span>
+                  </a>
+                </dt>
+                <dd class="hidden p-4 bg-black-300 target:block" id="fun">
+                  <div class="grid items-center grid-cols-2">
+                    <label class="text-sm font-semibold">Enabled</label>
+                    <Switch
+                      name="settings.modules.fun.enabled"
+                      checked={bot.settings.modules.fun.enabled}
+                    />
+                  </div>
+                </dd>
+
+                <dt class="p-4 text-lg odd:bg-black-200 even:bg-black-300">
+                  <a
+                    href="#moderation"
+                    data-turbolinks="false"
+                    class="flex items-start justify-between w-full text-left text-gray-400"
+                  >
+                    <span class="font-medium text-gray-900 dark:text-white">
+                      Moderation
+                    </span>
+                  </a>
+                </dt>
+                <dd
+                  class="hidden p-4 bg-black-300 target:block"
+                  id="moderation"
+                >
+                  <div class="grid items-center grid-cols-2">
+                    <label class="text-sm font-semibold">Enabled</label>
+                    <Switch
+                      name="settings.modules.moderation.enabled"
+                      checked={bot.settings.modules.moderation.enabled}
+                    />
+                  </div>
+
+                  <div class="grid items-center grid-cols-2">
+                    <label class="text-sm font-semibold">Logging</label>
+                    <div class="grid items-center grid-cols-2 px-2 col-span-full">
+                      <label class="text-sm font-semibold">Enabled</label>
+                      <Switch
+                        name="settings.modules.moderation.options.logging.enabled"
+                        checked={
+                          bot.settings.modules.moderation.options.logging
+                            .enabled
+                        }
+                      />
+
+                      <label class="text-sm font-semibold">Channel</label>
+                      <div class="flex mt-1 rounded-md shadow-sm">
+                        <span class="inline-flex items-center px-3 text-white rounded-l-md bg-black-400 sm:text-sm">
+                          #
+                        </span>
+                        <select
+                          id="channel"
+                          name="settings.modules.moderation.options.logging.channel"
+                          class="flex-1 block w-full min-w-0 px-1 py-2 border-none rounded-none bg-black-400 rounded-r-md sm:text-sm"
+                        >
+                          {!(channels instanceof DiscordAPIError) &&
+                            channels.map((channel) => (
+                              <option
+                                value={channel.id}
+                                selected={
+                                  bot.settings.modules.moderation.options
+                                    .logging.channel === channel.id
+                                }
+                              >
+                                {channel.name}
+                              </option>
+                            ))}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </dd>
+              </div>
+            </dl>
+          </div>
         </div>
       </div>
-    </div>
+    ) : (
+      <p>something</p>
+    )}
   </div>
 </BotLayout>

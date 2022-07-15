@@ -1,0 +1,99 @@
+---
+import { Integration } from "../../../../../types";
+import { GetIntegrations } from "../../../../../utils/global";
+import {
+  GetWorkspace,
+  GetWorkspaceIntegrations,
+} from "../../../../../utils/workspace";
+import GenericLayout from "../../../../components/GenericLayout.astro";
+import SimpleIcon from "../../../../components/React/SimpleIcon";
+import WorkspaceLayout from "../../../../components/WorkspaceLayout.astro";
+
+const { id } = Astro.params as { id: string };
+const workspace = await GetWorkspace(id, import.meta.env, Astro);
+const integrations = await GetIntegrations(import.meta.env, Astro);
+const workspaceIntegrations = await GetWorkspaceIntegrations(
+  workspace,
+  import.meta.env,
+  Astro
+);
+
+const getWorkspaceIntegrationForIntegration = (integration: Integration) => {
+  const workspaceIntegration = workspaceIntegrations.find(
+    (workspaceIntegration) =>
+      workspaceIntegration.integration === integration.id
+  );
+  return workspaceIntegration;
+};
+---
+
+<GenericLayout>
+  <WorkspaceLayout sidebar={{ showLogo: false }}>
+    <div>
+      <h1 class="flex w-full gap-2 text-3xl font-bold">Integrations</h1>
+
+      <p class="text-lg font-semibold text-gray-800 dark:text-gray-300">
+        Enable and disable your workspace integrations here.
+      </p>
+    </div>
+
+    <div class="grid w-full gap-4 md:grid-cols-3">
+      {integrations.map((integration) => (
+        <div class="flex flex-col w-full h-full bg-white border border-gray-300 divide-y divide-gray-300 rounded-lg dark:divide-black-400 dark:bg-black-300 dark:border-none">
+          <div class="p-4 mb-auto space-y-2">
+            <div class="flex items-center space-x-4 col-span-full">
+              {integration.isIconSimpleIcon ? (
+                <SimpleIcon icon={integration.icon} className="w-14 h-14" />
+              ) : (
+                <img
+                  src={integration.icon}
+                  alt={integration.name}
+                  class="object-cover w-12 h-12"
+                />
+              )}
+              <h1 class="font-semibold">{integration.prettyName}</h1>
+              <div class="flex justify-end w-full">
+                {getWorkspaceIntegrationForIntegration(integration) &&
+                getWorkspaceIntegrationForIntegration(integration).enabled ? (
+                  <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                    <svg
+                      class="mr-1.5 h-2 w-2 text-green-400"
+                      fill="currentColor"
+                      viewBox="0 0 8 8"
+                    >
+                      <circle cx="4" cy="4" r="3" />
+                    </svg>
+                    Active
+                  </span>
+                ) : (
+                  <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-black-400 text-white">
+                    <svg
+                      class="mr-1.5 h-2 w-2 text-black-700"
+                      fill="currentColor"
+                      viewBox="0 0 8 8"
+                    >
+                      <circle cx="4" cy="4" r="3" />
+                    </svg>
+                    Inactive
+                  </span>
+                )}
+              </div>
+            </div>
+            <p class="text-sm text-gray-600 col-span-full dark:text-gray-400">
+              {integration.description}
+            </p>
+          </div>
+
+          <div class="flex items-center justify-end w-full p-4 max-h-16">
+            <a
+              href={`/workspaces/${id}/integrations/${integration.id}`}
+              class="dark:hover:bg-black-500 hover:bg-astral-100 px-3 py-1.5 font-semibold rounded-md text-astral dark:text-white transition-colors duration-100 "
+            >
+              Modify Integration
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+  </WorkspaceLayout>
+</GenericLayout>

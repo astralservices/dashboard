@@ -1,0 +1,132 @@
+---
+import {
+  ClipboardCopyIcon,
+  ExternalLinkIcon,
+} from "@heroicons/react/outline/esm";
+import { GetBotForWorkspace } from "../../../../../utils/bot";
+import { GetUser } from "../../../../../utils/user";
+import { GetWorkspace } from "../../../../../utils/workspace";
+import BotLayout from "../../../../components/BotLayout.astro";
+import Switch from "../../../../components/Switch.astro";
+
+const user = await GetUser(import.meta.env, Astro);
+
+if (!user) {
+  return Astro.redirect(
+    `${import.meta.env.PUBLIC_AUTH_URL}/?redirect=${Astro.canonicalURL}`
+  );
+}
+
+const workspaceId = Astro.params.id as string;
+const workspace = await GetWorkspace(workspaceId, import.meta.env, Astro);
+const bot = await GetBotForWorkspace(workspace, import.meta.env, Astro);
+
+if (!bot) {
+  return Astro.redirect(`/workspaces/${workspaceId}/bot/create`);
+}
+
+const botUser = await fetch("https://discord.com/api/v9/users/@me", {
+  headers: {
+    Authorization: `Bot ${bot.token}`,
+  },
+}).then((res) => res.json());
+---
+
+<BotLayout showSave={false} bot={bot}>
+  <script is:inline>
+    var copied = false;
+
+    function copyToClipboard(input) {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(input).then(
+          () => {
+            copied = true;
+
+            document.getElementById("copyToClipboardText").innerText =
+              "Copied!";
+
+            setTimeout(() => {
+              copied = false;
+
+              document.getElementById("copyToClipboardText").innerText = "Copy";
+            }, 2000);
+          },
+          (err) => {
+            console.log("Failed to copy the text to clipboard.", err);
+          }
+        );
+      } else if (window.clipboardData) {
+        window.clipboardData.setData("Text", input);
+      }
+    }
+  </script>
+  <div class="w-full h-full px-2">
+    {bot ? (
+      <div class="space-y-10">
+        <div class="grid w-full grid-cols-2 gap-y-7">
+          <div class="col-span-full">
+            <h1 class="flex w-full gap-2 text-2xl font-bold">Settings</h1>
+            <p class="text-base font-semibold text-gray-800 dark:text-gray-300">
+              Change any other settings for your bot.
+            </p>
+          </div>
+          <div class="grid grid-cols-2 col-span-full">
+            <div class="flex flex-wrap">
+              <h3 class="w-full font-semibold dark:text-white">Invite Link</h3>
+              <p class="w-full text-sm font-normal dark:text-black-900">
+                Accidentally kicked your bot? Re-invite it here.
+              </p>
+            </div>
+            <div class="flex items-center justify-end">
+              <a
+                href={`https://discord.com/oauth2/authorize?client_id=${botUser.id}&scope=bot%20applications.commands&permissions=8&guild_id=${bot.settings.guild}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex items-center px-3 py-2 text-white rounded-lg bg-astral"
+              >
+                <ExternalLinkIcon className="w-6 h-6" />
+                <span class="ml-2">
+                  <span class="truncate">Invite</span>
+                </span>
+              </a>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 col-span-full gap-y-2">
+            <div class="flex flex-wrap">
+              <h3 class="w-full font-semibold dark:text-white">Bot ID</h3>
+              <p class="w-full text-sm font-normal dark:text-black-900">
+                If you ever need support for your bot, this is the ID to give
+                us!
+              </p>
+            </div>
+            <div class="col-span-2">
+              <div class="flex mt-1 rounded-md shadow-sm">
+                <div class="relative flex items-stretch flex-grow focus-within:z-10">
+                  <input
+                    type="text"
+                    name="id"
+                    id="id"
+                    class="block w-full border-gray-300 rounded-none opacity-75 dark:border-none dark:bg-black-300 focus:ring-indigo-500 focus:border-indigo-500 rounded-l-md sm:text-sm"
+                    disabled
+                    value={bot.id}
+                  />
+                </div>
+                <button
+                  type="button"
+                  onclick={`copyToClipboard('${bot.id}')`}
+                  class="relative inline-flex items-center px-4 py-2 -ml-px space-x-2 text-sm font-medium text-gray-700 border border-gray-300 dark:bg-black-400 dark:border-none dark:text-white dark:hover:bg-black-200 rounded-r-md bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                >
+                  <ClipboardCopyIcon className="w-5 h-5 text-gray-400" />
+                  <span id="copyToClipboardText">Copy</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    ) : (
+      <p>something</p>
+    )}
+  </div>
+</BotLayout>

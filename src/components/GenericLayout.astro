@@ -1,6 +1,8 @@
 ---
 import "../styles/global.css";
 import Prefetch from "@julian_cataldo/astro-prefetch/Prefetch.astro";
+
+const error = new URL(Astro.request.url).searchParams.get("error");
 ---
 
 <html lang="en">
@@ -25,6 +27,11 @@ import Prefetch from "@julian_cataldo/astro-prefetch/Prefetch.astro";
         experience for you, we can't guarantee a smooth experience.
       </p>
     </noscript>
+    {error && (
+      <div class="absolute z-50 w-full p-3 font-bold text-center text-black bg-red-400">
+        An error occured: {error}
+      </div>
+    )}
     <slot></slot>
   </body>
 </html>

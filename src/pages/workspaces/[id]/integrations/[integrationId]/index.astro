@@ -1,0 +1,72 @@
+---
+import {
+  ArrowLeftIcon,
+  CheckIcon,
+  StatusOfflineIcon,
+  StatusOnlineIcon,
+  XIcon,
+} from "@heroicons/react/outline/esm";
+import { GetIntegration } from "../../../../../../utils/global";
+import {
+  GetWorkspace,
+  GetWorkspaceIntegration,
+} from "../../../../../../utils/workspace";
+import GenericLayout from "../../../../../components/GenericLayout.astro";
+import WorkspaceLayout from "../../../../../components/WorkspaceLayout.astro";
+import { Form } from 'astro-forms'
+import tailwind from 'astro-forms/themes/tailwind'
+const { id, integrationId } = Astro.params as {
+  id: string;
+  integrationId: string;
+};
+const workspace = await GetWorkspace(id, import.meta.env, Astro);
+
+const integration = await GetIntegration(integrationId, import.meta.env, Astro);
+const workspaceIntegration = await GetWorkspaceIntegration(
+  workspace,
+  integrationId,
+  import.meta.env,
+  Astro
+);
+---
+
+<GenericLayout>
+  <WorkspaceLayout sidebar={{ showLogo: false }}>
+    <a href={`/workspaces/${id}/integrations`} class="flex items-center font-bold gap-x-2 text-astral">
+      <ArrowLeftIcon className="h-6 w-6" />
+      Go Back
+    </a>
+    <div class="flex justify-between w-full">
+      <div>
+        <h1 class="flex w-full gap-2 text-3xl font-bold">
+          {integration.prettyName} Integration
+        </h1>
+        <p class="text-lg font-semibold text-gray-800 dark:text-gray-300">
+          {integration.description}
+        </p>
+      </div>
+      <form class="flex items-center h-full" action={`${ import.meta.env.PUBLIC_API_ENDPOINT
+        }/api/v1/workspaces/${id}/integrations/${ workspaceIntegration && workspaceIntegration.enabled ? "disable"
+        : "enable" }/${integrationId}`} method="post">
+        <input hidden class="hidden" type="hidden" name="redirect" value={Astro.canonicalURL} />
+        {workspaceIntegration && workspaceIntegration.enabled ? (
+        <button type="submit" class="flex px-3 py-2 font-bold bg-red-500 rounded-md gap-x-2">
+          <StatusOfflineIcon className="w-6 h-6" />
+          Disable
+        </button>
+        ) : (
+        <button type="submit" class="flex px-3 py-2 font-bold bg-green-500 rounded-md gap-x-2">
+          <StatusOnlineIcon className="w-6 h-6" />
+          Enable
+        </button>
+        )}
+      </form>
+    </div>
+
+    <div class="w-full">
+      {integration.schema && Object.keys(integration.schema).length > 0 &&
+      <Form schema={integration.schema} theme={tailwind} classes="w-full" method='post' action={`${
+        import.meta.env.PUBLIC_API_ENDPOINT }/api/v1/workspaces/${id}/integrations/${integrationId}`} />}
+    </div>
+  </WorkspaceLayout>
+</GenericLayout>

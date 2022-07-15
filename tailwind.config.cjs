@@ -1,7 +1,12 @@
 const defaultTheme = require("tailwindcss/defaultTheme");
 
 module.exports = {
-  content: ["./src/**/*.{astro,html,js,jsx,md,svelte,ts,tsx,vue}"],
+  presets: [require("astro-forms/themes/tailwind/tailwind.config.cjs")],
+  jit: true,
+  content: [
+    "./src/**/*.{astro,html,js,jsx,md,svelte,ts,tsx,vue}",
+    "./node_modules/astro-forms/themes/tailwind/*.astro",
+  ],
   darkMode: "media",
   theme: {
     extend: {
