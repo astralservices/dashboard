@@ -44,7 +44,7 @@
     "@swup/scripts-plugin": "^1.1.0",
     "@swup/slide-theme": "^1.0.5",
     "@tailwindcss/forms": "^0.5.2",
-    "astro-forms": "^1.0.8",
+    "astro-forms": "^1.0.10",
     "chart.js": "^3.8.0",
     "discord.js": "^13.8.1",
     "fastify": "^4.0.3",

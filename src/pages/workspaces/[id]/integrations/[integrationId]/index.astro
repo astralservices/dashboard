@@ -65,8 +65,8 @@ const workspaceIntegration = await GetWorkspaceIntegration(
 
     <div class="w-full">
       {integration.schema && Object.keys(integration.schema).length > 0 &&
-      <Form schema={integration.schema} theme={tailwind} classes="w-full" method='post' action={`${
-        import.meta.env.PUBLIC_API_ENDPOINT }/api/v1/workspaces/${id}/integrations/${integrationId}`} />}
+      <Form schema={integration.schema} theme={tailwind} classes="w-full" method='post' data={workspaceIntegration.settings} action={`${
+        import.meta.env.PUBLIC_API_ENDPOINT }/api/v1/workspaces/${id}/integrations/${integrationId}`} redirect={Astro.canonicalURL} />}
     </div>
   </WorkspaceLayout>
 </GenericLayout>

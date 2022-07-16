@@ -1231,10 +1231,10 @@ ast-types@0.14.2, ast-types@^0.14.2:
   dependencies:
     tslib "^2.0.1"
 
-astro-forms@^1.0.8:
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/astro-forms/-/astro-forms-1.0.8.tgz#6e78d191555b2f3262091935fc58caea78acff3f"
-  integrity sha512-WOjmuBtynKGlagOGERNazn4tRXQme6ffjIVszVFZ1IoxeSqszk+aynla8Z81M1QEoEhefKqXqFr/jxNC+F6j5w==
+astro-forms@^1.0.10:
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/astro-forms/-/astro-forms-1.0.10.tgz#7c8820725ce6b72d1e255d477d7c89bff8069656"
+  integrity sha512-S6SU4ej1sMs9rWEkZ7jJarJb8KN6tJV+mZ9vlQu8uK4vWRFfRzLr0G5d/BLOkxOqdmC1xH+ruFs9S10/b+PZ5Q==
   dependencies:
     "@tailwindcss/forms" "^0.5.2"
     tailwindcss "^3.1.5"
