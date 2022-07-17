@@ -9,7 +9,7 @@ import GenericLayout from "../../../../components/GenericLayout.astro";
 import Modal from "../../../../components/Modal.astro";
 import { parse } from "twemoji-parser";
 import WorkspaceLayout from "../../../../components/WorkspaceLayout.astro";
-import { DiscordAPIError, Guild } from "discord.js";
+import { APIGuild } from "discord-api-types/v9";
 
 const user = await GetUser(import.meta.env, Astro);
 
@@ -31,7 +31,7 @@ if (bot) {
   return Astro.redirect(`/workspaces/${workspaceId}/bot`);
 }
 
-const guilds: Guild[] | DiscordAPIError = await fetch(
+const guilds: APIGuild[] = await fetch(
   "https://discord.com/api/v9/users/@me/guilds",
   {
     headers: {
@@ -150,7 +150,7 @@ const guilds: Guild[] | DiscordAPIError = await fetch(
                 name="settings.guild"
                 class="block w-full py-2 pl-3 pr-10 mt-1 text-base border-none rounded-md bg-black-200 sm:text-sm"
               >
-                {!(guilds instanceof DiscordAPIError) &&
+                {guilds[0] &&
                   guilds.map((guild) => (
                     <option value={guild.id}>{guild.name}</option>
                   ))}

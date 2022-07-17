@@ -1,5 +1,5 @@
 ---
-import { DiscordAPIError, GuildChannel } from "discord.js";
+import { APIGuildChannel, ChannelType } from "discord-api-types/v9";
 import { GetBotForWorkspace } from "../../../../../utils/bot";
 import { GetUser } from "../../../../../utils/user";
 import { GetWorkspace } from "../../../../../utils/workspace";
@@ -22,7 +22,7 @@ if (!bot) {
   return Astro.redirect(`/workspaces/${workspaceId}/bot/create`);
 }
 
-const channels: GuildChannel[] | DiscordAPIError = await fetch(
+const channels: APIGuildChannel<ChannelType.GuildText>[] = await fetch(
   `https://discord.com/api/v9/guilds/${bot.settings.guild}/channels`,
   {
     method: "GET",
@@ -116,7 +116,7 @@ const channels: GuildChannel[] | DiscordAPIError = await fetch(
                           name="settings.modules.moderation.options.logging.channel"
                           class="flex-1 block w-full min-w-0 px-1 py-2 border-none rounded-none bg-black-400 rounded-r-md sm:text-sm"
                         >
-                          {!(channels instanceof DiscordAPIError) &&
+                          {channels[0] &&
                             channels.map((channel) => (
                               <option
                                 value={channel.id}
