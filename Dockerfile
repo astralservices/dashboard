@@ -9,6 +9,8 @@ ADD . .
 ENV PUBLIC_API_ENDPOINT=https://api.astralapp.io
 ENV SECRET_NODE_ENV=production
 ENV PUBLIC_DASHBOARD_URL=https://auth.astralapp.io
+ENV SITE=https://dash.astralapp.io
+
 
 RUN yarn
 
