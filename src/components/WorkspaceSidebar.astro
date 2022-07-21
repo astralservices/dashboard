@@ -1,10 +1,10 @@
 ---
-import { Profile, Workspace } from "../../types";
-import { UserIcon, CogIcon, LogoutIcon, ViewGridIcon, UsersIcon, PuzzleIcon, LightningBoltIcon, AdjustmentsIcon } from '@heroicons/react/outline/esm/index.js'
+import { Workspace } from "../../types";
+import { MenuIcon, CogIcon, LogoutIcon, ViewGridIcon, UsersIcon, PuzzleIcon, LightningBoltIcon, AdjustmentsIcon } from '@heroicons/react/outline/esm/index.js'
 import { Actions, GetAllWorkspaces, GetUser, HasPermission } from "../../utils/user";
 import WorkspaceDropdownNoJs from './WorkspaceDropdown.astro'
 import WorkspaceDropdown from "./React/WorkspaceDropdown";
-import { GetSelfWorkspaceMember, GetWorkspaceMembers } from "../../utils/workspace";
+import { GetSelfWorkspaceMember } from "../../utils/workspace";
 
 export type WorkspaceSidebarProps = {
     workspace: Workspace;
@@ -79,57 +79,62 @@ const user = await GetUser(import.meta.env, Astro);
                 <div class="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
                     <div class="flex items-center flex-shrink-0 px-4">
                         {showLogo ? (
-                            <a class="flex items-center justify-center" href="/">
-                                <img class="w-3/4" src="/img/LogotypeDark.png" alt="Astral Logotype">
-                            </a>
-                            ) : (
-                            <WorkspaceDropdown workspaces={workspaces} client:only />
-                            <noscript>
-                                <WorkspaceDropdownNoJs workspaces={workspaces} />
-                            </noscript>
-                            )}
+                        <a class="flex items-center justify-center" href="/">
+                            <img class="w-3/4" src="/img/LogotypeDark.png" alt="Astral Logotype">
+                        </a>
+                        ) : (
+                        <WorkspaceDropdown workspaces={workspaces} client:only />
+                        <noscript>
+                            <WorkspaceDropdownNoJs workspaces={workspaces} />
+                        </noscript>
+                        )}
                     </div>
                     <nav class="px-2 mt-5 space-y-1">
                         {!showLogo && userMember && (
-                        <a href={`/workspaces/${currentWorkspace}`}
-                            class:list={["dark:text-white text-black dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm font-bold rounded-lg transition-colors duration-100", { 'dark:bg-black-200': currentPage === `/workspaces/${currentWorkspace}/` } ]}
-                        >
+                        <a href={`/workspaces/${currentWorkspace}`} class:list={[`dark:text-white text-black
+                            dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4
+                            text-sm font-bold rounded-lg transition-colors duration-100`, { 'dark:bg-black-200' :
+                            currentPage===`/workspaces/${currentWorkspace}/` } ]}>
                             <ViewGridIcon className="w-6 h-6 mr-3" />
                             Dashboard
                         </a>
 
-                        <a href={`/workspaces/${currentWorkspace}/bot`}
-                            class:list={["dark:text-white text-black dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm font-bold rounded-lg transition-colors duration-100", { 'dark:bg-black-200': (currentPage === `/workspaces/${currentWorkspace}/bot/` || currentPage.includes('bot')) } ]}
-                        >
+                        <a href={`/workspaces/${currentWorkspace}/bot`} class:list={[`dark:text-white text-black
+                            dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4
+                            text-sm font-bold rounded-lg transition-colors duration-100`, { 'dark:bg-black-200' :
+                            (currentPage===`/workspaces/${currentWorkspace}/bot/` || currentPage.includes('bot')) } ]}>
                             <LightningBoltIcon className="w-6 h-6 mr-3" />
                             Discord Bot
                         </a>
 
-                        <a href={`/workspaces/${currentWorkspace}/team`}
-                            class:list={["dark:text-white text-black dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm font-bold rounded-lg transition-colors duration-100", { 'dark:bg-black-200': currentPage === `/workspaces/${currentWorkspace}/team/` } ]}
-                        >
+                        <a href={`/workspaces/${currentWorkspace}/team`} class:list={[`dark:text-white text-black
+                            dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4
+                            text-sm font-bold rounded-lg transition-colors duration-100`, { 'dark:bg-black-200' :
+                            currentPage===`/workspaces/${currentWorkspace}/team/` } ]}>
                             <UsersIcon className="w-6 h-6 mr-3" />
                             Team
                         </a>
 
-                        <a href={`/workspaces/${currentWorkspace}/integrations`}
-                            class:list={["dark:text-white text-black dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm font-bold rounded-lg transition-colors duration-100", { 'dark:bg-black-200': currentPage === `/workspaces/${currentWorkspace}/integrations/` } ]}
-                        >
+                        <a href={`/workspaces/${currentWorkspace}/integrations`} class:list={[`dark:text-white
+                            text-black dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5
+                            space-x-4 text-sm font-bold rounded-lg transition-colors duration-100`,
+                            { 'dark:bg-black-200' : currentPage===`/workspaces/${currentWorkspace}/integrations/` } ]}>
                             <PuzzleIcon className="w-6 h-6 mr-3" />
                             Integrations
                         </a>
 
                         <>
                             {HasPermission(userMember, Actions.UPDATE_WORKSPACE) && (
-                                <a href={`/workspaces/${currentWorkspace}/settings`}
-                                class:list={["dark:text-white text-black dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm font-bold rounded-lg transition-colors duration-100", { 'dark:bg-black-200': currentPage === `/workspaces/${currentWorkspace}/settings/` } ]}
-                            >
+                            <a href={`/workspaces/${currentWorkspace}/settings`} class:list={[`dark:text-white
+                                text-black dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5
+                                space-x-4 text-sm font-bold rounded-lg transition-colors duration-100`,
+                                { 'dark:bg-black-200' : currentPage===`/workspaces/${currentWorkspace}/settings/` } ]}>
                                 <AdjustmentsIcon className="w-6 h-6 mr-3" />
                                 Settings
                             </a>
                             )}
                         </>
-                    )}
+                        )}
                     </nav>
                 </div>
                 <div class="flex-shrink-0 p-4 space-y-4">
@@ -155,6 +160,12 @@ const user = await GetUser(import.meta.env, Astro);
                             <div class="text-sm font-bold text-black dark:text-white">{user.provider_data.username}
                             </div>
                             <div class="text-xs font-medium text-black dark:text-white">{user.provider_data.email}</div>
+                        </div>
+                        <div class="col-span-1">
+                            <span
+                                class="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-astral-100 text-astral-800">
+                                Beta 2
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -184,44 +195,49 @@ const user = await GetUser(import.meta.env, Astro);
                 )}
                 <nav class="flex flex-col flex-1 px-2 mt-5 space-y-4">
                     {!showLogo && userMember && (
-                        <a href={`/workspaces/${currentWorkspace}`}
-                            class:list={["dark:text-white text-black dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm font-bold rounded-lg transition-colors duration-100", { 'dark:bg-black-200': currentPage === `/workspaces/${currentWorkspace}/` } ]}
-                        >
-                            <ViewGridIcon className="w-6 h-6 mr-3" />
-                            Dashboard
-                        </a>
+                    <a href={`/workspaces/${currentWorkspace}`} class:list={[`dark:text-white text-black
+                        dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm
+                        font-bold rounded-lg transition-colors duration-100`, { 'dark:bg-black-200' :
+                        currentPage===`/workspaces/${currentWorkspace}/` } ]}>
+                        <ViewGridIcon className="w-6 h-6 mr-3" />
+                        Dashboard
+                    </a>
 
-                        <a href={`/workspaces/${currentWorkspace}/bot`}
-                            class:list={["dark:text-white text-black dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm font-bold rounded-lg transition-colors duration-100", { 'dark:bg-black-200': (currentPage === `/workspaces/${currentWorkspace}/bot/` || currentPage.includes('bot')) } ]}
-                        >
-                            <LightningBoltIcon className="w-6 h-6 mr-3" />
-                            Discord Bot
-                        </a>
+                    <a href={`/workspaces/${currentWorkspace}/bot`} class:list={[`dark:text-white text-black
+                        dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm
+                        font-bold rounded-lg transition-colors duration-100`, { 'dark:bg-black-200' :
+                        (currentPage===`/workspaces/${currentWorkspace}/bot/` || currentPage.includes('bot')) } ]}>
+                        <LightningBoltIcon className="w-6 h-6 mr-3" />
+                        Discord Bot
+                    </a>
 
-                        <a href={`/workspaces/${currentWorkspace}/team`}
-                            class:list={["dark:text-white text-black dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm font-bold rounded-lg transition-colors duration-100", { 'dark:bg-black-200': currentPage === `/workspaces/${currentWorkspace}/team/` } ]}
-                        >
-                            <UsersIcon className="w-6 h-6 mr-3" />
-                            Team
-                        </a>
+                    <a href={`/workspaces/${currentWorkspace}/team`} class:list={[`dark:text-white text-black
+                        dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm
+                        font-bold rounded-lg transition-colors duration-100`, { 'dark:bg-black-200' :
+                        currentPage===`/workspaces/${currentWorkspace}/team/` } ]}>
+                        <UsersIcon className="w-6 h-6 mr-3" />
+                        Team
+                    </a>
 
-                        <a href={`/workspaces/${currentWorkspace}/integrations`}
-                            class:list={["dark:text-white text-black dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm font-bold rounded-lg transition-colors duration-100", { 'dark:bg-black-200': currentPage === `/workspaces/${currentWorkspace}/integrations/` } ]}
-                        >
-                            <PuzzleIcon className="w-6 h-6 mr-3" />
-                            Integrations
-                        </a>
+                    <a href={`/workspaces/${currentWorkspace}/integrations`} class:list={[`dark:text-white text-black
+                        dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm
+                        font-bold rounded-lg transition-colors duration-100`, { 'dark:bg-black-200' :
+                        currentPage===`/workspaces/${currentWorkspace}/integrations/` } ]}>
+                        <PuzzleIcon className="w-6 h-6 mr-3" />
+                        Integrations
+                    </a>
 
-                        <>
-                            {HasPermission(userMember, Actions.UPDATE_WORKSPACE) && (
-                                <a href={`/workspaces/${currentWorkspace}/settings`}
-                                class:list={["dark:text-white text-black dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm font-bold rounded-lg transition-colors duration-100", { 'dark:bg-black-200': currentPage === `/workspaces/${currentWorkspace}/settings/` } ]}
-                            >
-                                <AdjustmentsIcon className="w-6 h-6 mr-3" />
-                                Settings
-                            </a>
-                            )}
-                        </>
+                    <>
+                        {HasPermission(userMember, Actions.UPDATE_WORKSPACE) && (
+                        <a href={`/workspaces/${currentWorkspace}/settings`} class:list={[`dark:text-white text-black
+                            dark:hover:bg-black-200 hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4
+                            text-sm font-bold rounded-lg transition-colors duration-100`, { 'dark:bg-black-200' :
+                            currentPage===`/workspaces/${currentWorkspace}/settings/` } ]}>
+                            <AdjustmentsIcon className="w-6 h-6 mr-3" />
+                            Settings
+                        </a>
+                        )}
+                    </>
                     )}
 
                 </nav>
@@ -250,6 +266,15 @@ const user = await GetUser(import.meta.env, Astro);
                             <div class="text-xs font-medium text-black dark:text-white">{user.provider_data.email}</div>
                         </div>
                     </div>
+
+                    <span
+                        class="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-astral-100 text-astral-800 has-tooltip">
+                        <span
+                            class="p-1 mt-14 text-sm text-white transition duration-300 rounded bg-black-400 opacity-90 tooltip">
+                            This is the second beta of Astral.
+                        </span>
+                        Beta 2
+                    </span>
                 </div>
             </div>
         </div>
@@ -260,10 +285,7 @@ const user = await GetUser(import.meta.env, Astro);
                 class="-ml-0.5 -mt-0.5 h-12 w-12 inline-flex items-center justify-center rounded-md text-black-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
                 <span class="sr-only">Open sidebar</span>
                 <!-- Heroicon name: outline/menu -->
-                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                    stroke="currentColor" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
+                <MenuIcon className="w-6 h-6" />
             </a>
         </div>
         <main class="flex-1 min-h-screen dark:bg-black dark:text-white wrapper" id="swup">
