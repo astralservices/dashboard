@@ -51,7 +51,7 @@ export default function WorkspaceStats({
         borderColor: "rgba(255, 194, 74, 1)",
       },
       {
-        label: "Server Members",
+        label: "Net Server Members",
         data: botAnalytics.map((a) => a.members ?? 0),
         backgroundColor: "rgba(74, 186, 122, 0.2)",
         borderColor: "rgba(74, 186, 122, 1)",
