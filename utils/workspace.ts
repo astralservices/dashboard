@@ -18,9 +18,7 @@ export async function GetPlans(
 ): Promise<Plan[]> {
   const data: APIResponse<Plan[]> = await fetch(
     `${
-      env.SECRET_NODE_ENV === "production"
-        ? import.meta.env.PUBLIC_API_ENDPOINT
-        : "http://127.0.0.1:3000"
+      env.PROD ? import.meta.env.PUBLIC_API_ENDPOINT : "http://127.0.0.1:3000"
     }/api/v1/plans`,
     {
       headers: Astro.request.headers,
@@ -44,9 +42,7 @@ export async function GetWorkspace(
 ): Promise<Workspace> {
   const data: APIResponse<Workspace> = await fetch(
     `${
-      env.SECRET_NODE_ENV === "production"
-        ? import.meta.env.PUBLIC_API_ENDPOINT
-        : "http://127.0.0.1:3000"
+      env.PROD ? import.meta.env.PUBLIC_API_ENDPOINT : "http://127.0.0.1:3000"
     }/api/v1/workspaces/${id}`,
     {
       headers: Astro.request.headers,
@@ -70,9 +66,7 @@ export async function GetWorkspaceMemberCount(
 ): Promise<number> {
   const data: APIResponse<number> = await fetch(
     `${
-      env.SECRET_NODE_ENV === "production"
-        ? import.meta.env.PUBLIC_API_ENDPOINT
-        : "http://127.0.0.1:3000"
+      env.PROD ? import.meta.env.PUBLIC_API_ENDPOINT : "http://127.0.0.1:3000"
     }/api/v1/workspaces/${id}/members?count=true`,
     {
       headers: Astro.request.headers,
@@ -97,9 +91,7 @@ export async function GetSelfWorkspaceMember(
   const user = await GetUser(env, Astro);
   const data: APIResponse<WorkspaceMember> = await fetch(
     `${
-      env.SECRET_NODE_ENV === "production"
-        ? import.meta.env.PUBLIC_API_ENDPOINT
-        : "http://127.0.0.1:3000"
+      env.PROD ? import.meta.env.PUBLIC_API_ENDPOINT : "http://127.0.0.1:3000"
     }/api/v1/workspaces/${id}/members/${user.id}`,
     {
       headers: Astro.request.headers,
@@ -123,9 +115,7 @@ export async function GetWorkspaceMembers(
 ): Promise<WorkspaceMember[]> {
   const data: APIResponse<WorkspaceMember[]> = await fetch(
     `${
-      env.SECRET_NODE_ENV === "production"
-        ? import.meta.env.PUBLIC_API_ENDPOINT
-        : "http://127.0.0.1:3000"
+      env.PROD ? import.meta.env.PUBLIC_API_ENDPOINT : "http://127.0.0.1:3000"
     }/api/v1/workspaces/${id}/members`,
     {
       headers: Astro.request.headers,
@@ -157,9 +147,7 @@ export async function GetAnalytics(
 ): Promise<BotAnalytics[] | null> {
   const data: APIResponse<BotAnalytics[] | null> = await fetch(
     `${
-      env.SECRET_NODE_ENV === "production"
-        ? import.meta.env.PUBLIC_API_ENDPOINT
-        : "http://127.0.0.1:3000"
+      env.PROD ? import.meta.env.PUBLIC_API_ENDPOINT : "http://127.0.0.1:3000"
     }/api/v1/workspaces/${workspace.id}/analytics`,
     {
       headers: Astro.request.headers,
@@ -183,9 +171,7 @@ export async function GetWorkspaceIntegrations(
 ): Promise<WorkspaceIntegration[] | null> {
   const data: APIResponse<WorkspaceIntegration[] | null> = await fetch(
     `${
-      env.SECRET_NODE_ENV === "production"
-        ? import.meta.env.PUBLIC_API_ENDPOINT
-        : "http://127.0.0.1:3000"
+      env.PROD ? import.meta.env.PUBLIC_API_ENDPOINT : "http://127.0.0.1:3000"
     }/api/v1/workspaces/${workspace.id}/integrations`,
     {
       headers: Astro.request.headers,
@@ -210,9 +196,7 @@ export async function GetWorkspaceIntegration(
 ): Promise<WorkspaceIntegration | null> {
   const data: APIResponse<WorkspaceIntegration | null> = await fetch(
     `${
-      env.SECRET_NODE_ENV === "production"
-        ? import.meta.env.PUBLIC_API_ENDPOINT
-        : "http://127.0.0.1:3000"
+      env.PROD ? import.meta.env.PUBLIC_API_ENDPOINT : "http://127.0.0.1:3000"
     }/api/v1/workspaces/${workspace.id}/integrations/${id}`,
     {
       headers: Astro.request.headers,

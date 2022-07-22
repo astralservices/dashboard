@@ -11,7 +11,6 @@ ENV SECRET_NODE_ENV=production
 ENV PUBLIC_DASHBOARD_URL=https://auth.astralapp.io
 ENV SITE=https://dash.astralapp.io
 
-
 RUN yarn
 
 RUN yarn build

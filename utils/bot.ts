@@ -8,9 +8,7 @@ export async function GetBotForWorkspace(
 ): Promise<Bot | null> {
   const data: APIResponse<Bot | null> = await fetch(
     `${
-      env.SECRET_NODE_ENV === "production"
-        ? import.meta.env.PUBLIC_API_ENDPOINT
-        : "http://127.0.0.1:3000"
+      env.PROD ? import.meta.env.PUBLIC_API_ENDPOINT : "http://127.0.0.1:3000"
     }/api/v1/workspaces/${workspace.id}/bot`,
     {
       headers: Astro.request.headers,

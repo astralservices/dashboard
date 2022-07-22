@@ -7,9 +7,7 @@ export async function GetRegions(
 ): Promise<Region[] | null> {
   const data: APIResponse<Region[]> = await fetch(
     `${
-      env.SECRET_NODE_ENV === "production"
-        ? import.meta.env.PUBLIC_API_ENDPOINT
-        : "http://127.0.0.1:3000"
+      env.PROD ? import.meta.env.PUBLIC_API_ENDPOINT : "http://127.0.0.1:3000"
     }/api/v1/regions`,
     {
       headers: Astro.request.headers,
@@ -32,9 +30,7 @@ export async function GetIntegrations(
 ): Promise<Integration[] | null> {
   const data: APIResponse<Integration[] | null> = await fetch(
     `${
-      env.SECRET_NODE_ENV === "production"
-        ? import.meta.env.PUBLIC_API_ENDPOINT
-        : "http://127.0.0.1:3000"
+      env.PROD ? import.meta.env.PUBLIC_API_ENDPOINT : "http://127.0.0.1:3000"
     }/api/v1/integrations`,
     {
       headers: Astro.request.headers,
@@ -58,9 +54,7 @@ export async function GetIntegration(
 ): Promise<Integration | null> {
   const data: APIResponse<Integration | null> = await fetch(
     `${
-      env.SECRET_NODE_ENV === "production"
-        ? import.meta.env.PUBLIC_API_ENDPOINT
-        : "http://127.0.0.1:3000"
+      env.PROD ? import.meta.env.PUBLIC_API_ENDPOINT : "http://127.0.0.1:3000"
     }/api/v1/integrations/${id}`,
     {
       headers: Astro.request.headers,
