@@ -22,9 +22,7 @@ if (!user) {
 
 <GenericLayout>
   <WorkspaceLayout sidebar={{ showLogo: false }}>
-    <div
-      class="grid w-full grid-cols-2 gap-3 lg:grid-cols-3 md:grid-cols-2 space-y-10"
-    >
+    <div class="grid w-full grid-cols-2 gap-3 lg:grid-cols-3 md:grid-cols-2 space-y-10">
       <div class="col-span-full">
         <div class="flex justify-between w-full">
           <div>
@@ -40,53 +38,28 @@ if (!user) {
         <div class="col-span-2 space-y-1">
           <label class="text-sm font-semibold">Username</label>
           <div class="flex mt-1 rounded-md shadow-sm">
-            <div
-              class="relative flex items-stretch flex-grow focus-within:z-10"
-            >
-              <input
-                type="text"
-                name="name"
-                id="name"
-                required
+            <div class="relative flex items-stretch flex-grow focus-within:z-10">
+              <input type="text" name="name" id="name" required
                 class="block w-full border-gray-300 rounded-md opacity-75 dark:border-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-black-300 sm:text-sm"
-                placeholder="richardhendricks"
-                disabled
-                value={user.provider_data.username}
-              />
+                placeholder="richardhendricks" disabled value={user.provider_data.username} />
             </div>
           </div>
           <p>
-            <span class="text-sm font-normal text-black-900"
-              >This can't be changed. It syncs with your Discord username.
+            <span class="text-sm font-normal text-black-900">This can't be changed. It syncs with your Discord username.
             </span>
           </p>
         </div>
-        <form
-          class="flex col-span-2 space-y-1"
-          action={`${
-            import.meta.env.PUBLIC_API_ENDPOINT
-          }/api/v1/auth/providers/discord`}
-          method="POST"
-        >
-          <input
-            type="hidden"
-            hidden
-            class="hidden"
-            name="redirect"
-            value={Astro.canonicalURL}
-          />
+        <form class="flex col-span-2 space-y-1" action={`${ import.meta.env.PUBLIC_API_ENDPOINT
+          }/api/v1/auth/providers/discord`} method="POST">
+          <input type="hidden" hidden class="hidden" name="redirect" value={Astro.canonicalURL} />
           <div class="flex flex-col flex-grow">
-            <span class="text-sm font-medium text-gray-900 dark:text-white"
-              >Sync with Discord
-            </span><span class="text-sm text-gray-500 dark:text-black-900"
-              >Resets your profile picture, profile banner, and username. This
+            <span class="text-sm font-medium text-gray-900 dark:text-white">Sync with Discord
+            </span><span class="text-sm text-gray-500 dark:text-black-900">Resets your profile picture, profile banner,
+              and username. This
               will automatically save your changes.
             </span>
           </div>
-          <button
-            type="submit"
-            class="flex items-center px-3 py-2 text-white rounded-lg bg-astral "
-          >
+          <button type="submit" class="flex items-center px-3 py-2 text-white rounded-lg bg-astral ">
             <RefreshIcon className="w-6 h-6" />
             <span class="ml-2">
               <span class="truncate">Sync</span>
@@ -94,49 +67,27 @@ if (!user) {
           </button>
         </form>
         <div class="grid col-span-full grid-cols-2 gap-x-4">
-          <form
-            action={`${import.meta.env.PUBLIC_API_ENDPOINT}/api/v1/auth/delete`}
-            method="POST"
-            class="col-span-1"
-          >
-            <input
-              type="hidden"
-              hidden
-              class="hidden"
-              name="redirect"
-              value={Astro.site}
-            />
-            <a
-              href="#delete-confirmation"
-              data-turbolinks="false"
-              class="flex w-full justify-center order-last font-bold px-3 py-2 text-white bg-red-500 rounded-md md:col-span-1 gap-x-2"
-            >
+          <form action={`${import.meta.env.PUBLIC_API_ENDPOINT}/api/v1/auth/delete`} method="POST" class="col-span-1">
+            <input type="hidden" hidden class="hidden" name="redirect" value={Astro.site} />
+            <a href="#delete-confirmation" data-turbolinks="false"
+              class="flex w-full justify-center order-last font-bold px-3 py-2 text-white bg-red-500 rounded-md md:col-span-1 gap-x-2">
               <TrashIcon className="w-6 h-6" />
               Delete Data
             </a>
 
-            <Modal
-              id="delete-confirmation"
-              title="Are you sure?"
-              Icon={ExclamationCircleIcon}
-              type="danger"
-            >
+            <Modal id="delete-confirmation" title="Are you sure?" Icon={ExclamationCircleIcon} type="danger">
               <div class="grid gap-y-2">
                 <p>This will delete all of your data and log you out.</p>
 
                 <div class="grid grid-cols-2 gap-x-4">
-                  <a
-                    href="#"
-                    data-turbolinks="false"
-                    class="flex w-full justify-center order-last font-bold px-3 py-2 text-white rounded-md md:col-span-1 gap-x-2"
-                  >
+                  <a href="#" data-turbolinks="false"
+                    class="flex w-full justify-center order-last font-bold px-3 py-2 text-white rounded-md md:col-span-1 gap-x-2">
                     Cancel
                   </a>
 
                   <button
                     class="flex w-full justify-center order-last font-bold px-3 py-2 text-white bg-red-500 rounded-md md:col-span-1 gap-x-2"
-                    type="submit"
-                  >
+                    type="submit">
                     Confirm
                   </button>
                 </div>
@@ -144,14 +95,9 @@ if (!user) {
             </Modal>
           </form>
 
-          <form
-            action={`${import.meta.env.PUBLIC_API_ENDPOINT}/api/v1/auth/gdpr`}
-            class="col-span-1"
-          >
-            <button
-              type="submit"
-              class="flex px-3 w-full justify-center py-2 font-semibold rounded-md gap-x-2 bg-pink"
-            >
+          <form action={`${import.meta.env.PUBLIC_API_ENDPOINT}/api/v1/auth/gdpr`} class="col-span-1">
+            <button type="submit"
+              class="flex px-3 w-full justify-center py-2 font-semibold rounded-md gap-x-2 bg-astral">
               <DownloadIcon className="w-6 h-6" />
               Request Data
             </button>
