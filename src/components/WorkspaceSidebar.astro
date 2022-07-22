@@ -248,7 +248,7 @@ const user = await GetUser(import.meta.env, Astro);
                         Account Settings
                     </a>
                     <form action={`${import.meta.env.PUBLIC_API_ENDPOINT}/api/v1/auth/logout/discord`} class="w-full">
-                        <input hidden readonly name="redirect" value={Astro.site} />
+                        <input hidden readonly name="redirect" value={import.meta.env.PUBLIC_AUTH_URL} />
                         <button type="submit"
                             class="dark:text-white text-black dark:hover:bg-black-200 w-full hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm font-bold rounded-lg transition-colors duration-100">
                             <LogoutIcon className="w-5 h-5 mr-2" />
