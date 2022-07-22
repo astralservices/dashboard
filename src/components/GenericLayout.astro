@@ -28,6 +28,16 @@ const error = new URL(Astro.request.url).searchParams.get("error");
       a.appendChild(r);
     })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
   </script>
+
+  <style is:global>
+    .tooltip {
+      @apply invisible absolute;
+    }
+
+    .has-tooltip:hover .tooltip {
+      @apply visible z-50;
+    }
+  </style>
 </head>
 
 <body class="bg-white dark:bg-black">
