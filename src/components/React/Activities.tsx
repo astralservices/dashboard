@@ -43,9 +43,10 @@ function BotActivity({
           <div className="flex-1 min-w-0 sm:flex sm:items-center sm:justify-between">
             <div className="truncate">
               <div className="flex text-sm">
-                <p className="font-bold text-indigo-600 truncate">
+                <p className="font-bold text-astral-200 truncate">
                   {activity.type.toString().charAt(0).toUpperCase() +
-                    activity.type.toString().slice(1).toLowerCase()}
+                    activity.type.toString().slice(1).toLowerCase()}{" "}
+                  {activity.type === "LISTENING" ? "to" : ""}
                 </p>
                 <p className="flex-shrink-0 ml-1 font-normal text-gray-500 dark:text-white">
                   {activity.name}
@@ -206,7 +207,10 @@ function EditActivityModal({
                                         activity.type
                                           .toString()
                                           .slice(1)
-                                          .toLowerCase()}
+                                          .toLowerCase()}{" "}
+                                      {activity.type === "LISTENING"
+                                        ? "to"
+                                        : ""}
                                     </span>
                                   </div>
                                   <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
@@ -231,7 +235,7 @@ function EditActivityModal({
                                         className={({ active }) =>
                                           classNames(
                                             active
-                                              ? "text-white bg-indigo-600"
+                                              ? "text-white bg-astral"
                                               : "text-gray-900 dark:text-white",
                                             "cursor-default select-none relative py-2 pr-9"
                                           )
@@ -250,7 +254,12 @@ function EditActivityModal({
                                                 )}
                                               >
                                                 {type.charAt(0).toUpperCase() +
-                                                  type.slice(1).toLowerCase()}
+                                                  type
+                                                    .slice(1)
+                                                    .toLowerCase()}{" "}
+                                                {type === "LISTENING"
+                                                  ? "to"
+                                                  : ""}
                                               </span>
                                             </div>
 
@@ -259,7 +268,7 @@ function EditActivityModal({
                                                 className={classNames(
                                                   active
                                                     ? "text-white"
-                                                    : "text-indigo-600",
+                                                    : "text-astral",
                                                   "absolute inset-y-0 right-0 flex items-center pr-4"
                                                 )}
                                               >
