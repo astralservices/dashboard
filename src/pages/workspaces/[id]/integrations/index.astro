@@ -49,36 +49,39 @@ const getWorkspaceIntegrationForIntegration = (integration: Integration) => {
             <img src={integration.icon} alt={integration.name} class="object-cover w-12 h-12" />
             )}
             <h1 class="font-semibold">{integration.prettyName}</h1>
-            <div class="flex justify-end w-full">
-              {getWorkspaceIntegrationForIntegration(integration) &&
-              getWorkspaceIntegrationForIntegration(integration).enabled ? (
-              <span
-                class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
-                <svg class="mr-1.5 h-2 w-2 text-green-400" fill="currentColor" viewBox="0 0 8 8">
-                  <circle cx="4" cy="4" r="3" />
-                </svg>
-                Active
-              </span>
-              ) : (
-              <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-black-400 text-white">
-                <svg class="mr-1.5 h-2 w-2 text-black-700" fill="currentColor" viewBox="0 0 8 8">
-                  <circle cx="4" cy="4" r="3" />
-                </svg>
-                Inactive
-              </span>
-              )}
-            </div>
           </div>
           <p class="text-sm text-gray-600 col-span-full dark:text-gray-400">
             {integration.description}
           </p>
         </div>
 
-        <div class="flex items-center justify-end w-full p-4 max-h-16">
-          <a href={`/workspaces/${id}/integrations/${integration.id}`}
-            class="dark:hover:bg-black-500 hover:bg-astral-100 px-3 py-1.5 font-semibold rounded-md text-astral dark:text-white transition-colors duration-100 ">
-            Modify Integration
-          </a>
+
+        <div class="grid grid-cols-2 items-center w-full p-4 max-h-16">
+          <div class="flex justify-start w-full">
+            {getWorkspaceIntegrationForIntegration(integration) &&
+            getWorkspaceIntegrationForIntegration(integration).enabled ? (
+            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+              <svg class="mr-1.5 h-2 w-2 text-green-400" fill="currentColor" viewBox="0 0 8 8">
+                <circle cx="4" cy="4" r="3" />
+              </svg>
+              Active
+            </span>
+            ) : (
+            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-black-400 text-white">
+              <svg class="mr-1.5 h-2 w-2 text-black-700" fill="currentColor" viewBox="0 0 8 8">
+                <circle cx="4" cy="4" r="3" />
+              </svg>
+              Inactive
+            </span>
+            )}
+          </div>
+
+          <div class="flex w-full justify-end">
+            <a href={`/workspaces/${id}/integrations/${integration.id}`}
+              class="dark:hover:bg-black-500 hover:bg-astral-100 px-3 py-1.5 font-semibold rounded-md text-astral dark:text-white transition-colors duration-100 ">
+              Modify
+            </a>
+          </div>
         </div>
       </div>
       ))}
