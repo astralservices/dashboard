@@ -11,8 +11,10 @@ const { id } = Astro.params as { id: string };
 
 const user = await GetUser(import.meta.env, Astro);
 
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
 if (!user) {
-  return Astro.redirect(`${import.meta.env.PUBLIC_AUTH_URL}/?redirect=${Astro.canonicalURL}`);
+  return Astro.redirect(`${import.meta.env.PUBLIC_AUTH_URL}/?redirect=${canonicalURL}`);
 }
 
 const members = await GetWorkspaceMembers(id, import.meta.env, Astro);
@@ -33,7 +35,7 @@ const userMember = members.find(member => (member.profile as Profile).id === use
     <div class="flex w-full space-y-10">
       <div class="flex justify-end w-full">
         <form action={`${import.meta.env.PUBLIC_API_ENDPOINT}/api/v1/workspaces/${id}/members`} method="post">
-            <input hidden readonly name="redirect" value={Astro.canonicalURL}>
+            <input hidden readonly name="redirect" value={canonicalURL.toString()}>
             <Modal id="new" title="Invite new member" type="success" Icon={UserAddIcon}>
                 <div class="grid grid-cols-2">
                     <div class="grid grid-cols-2 mt-4 col-span-full gap-x-2">
@@ -127,7 +129,7 @@ const userMember = members.find(member => (member.profile as Profile).id === use
                         )}
                         {HasPermission(userMember, Actions.DELETE_WORKSPACE_MEMBER) && (
                             <form action={`${import.meta.env.PUBLIC_API_ENDPOINT}/api/v1/workspaces/${id}/members/${member.id}/remove`} method="POST">
-                                <input hidden readonly name="redirect" value={Astro.canonicalURL}>
+                                <input hidden readonly name="redirect" value={canonicalURL.toString()}>
                                 <Modal id={`remove-${member.id}`} type="danger" Icon={ExclamationCircleIcon} title={`Remove ${(member.profile as Profile).preferred_name}?`}>
                                     <p class="text-black text-md dark:text-white">Are you sure you want to remove this team member?</p>
 

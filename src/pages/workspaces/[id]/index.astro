@@ -16,8 +16,10 @@ import { GetUser } from "../../../../utils/user";
 
 const user = await GetUser(import.meta.env, Astro);
 
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
 if (!user) {
-  return Astro.redirect(`${import.meta.env.PUBLIC_AUTH_URL}/?redirect=${Astro.canonicalURL}`);
+  return Astro.redirect(`${import.meta.env.PUBLIC_AUTH_URL}/?redirect=${canonicalURL}`);
 }
 
 const { id } = Astro.params as { id: string };
@@ -99,7 +101,7 @@ const members = await GetWorkspaceMemberCount(id, import.meta.env, Astro);
                     Javascript is needed for this chart!
                 </p>    
             </noscript>
-          <WorkspaceStats client:only botAnalytics={analytics} />
+          <WorkspaceStats client:only="react" botAnalytics={analytics} />
         ) : (
           <p class="w-full p-10 text-2xl font-semibold text-center">
             No Stats to Show!

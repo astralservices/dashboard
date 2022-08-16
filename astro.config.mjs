@@ -15,6 +15,7 @@ export default defineConfig({
   adapter: deno({
     port: 5000,
   }),
+  output: "server",
   integrations: [react(), tailwind(), turbolinks(), partytown()],
   site:
     process.env.SECRET_NODE_ENV === "production"

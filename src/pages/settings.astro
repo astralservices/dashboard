@@ -13,9 +13,11 @@ import WorkspaceLayout from "../components/WorkspaceLayout.astro";
 
 const user = await GetUser(import.meta.env, Astro);
 
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
 if (!user) {
   return Astro.redirect(
-    `${import.meta.env.PUBLIC_AUTH_URL}/?redirect=${Astro.canonicalURL}`
+    `${import.meta.env.PUBLIC_AUTH_URL}/?redirect=${canonicalURL}`
   );
 }
 ---
@@ -51,7 +53,7 @@ if (!user) {
         </div>
         <form class="flex col-span-2 space-y-1" action={`${ import.meta.env.PUBLIC_API_ENDPOINT
           }/api/v1/auth/providers/discord`} method="POST">
-          <input type="hidden" hidden class="hidden" name="redirect" value={Astro.canonicalURL} />
+          <input type="hidden" hidden class="hidden" name="redirect" value={canonicalURL.toString()} />
           <div class="flex flex-col flex-grow">
             <span class="text-sm font-medium text-gray-900 dark:text-white">Sync with Discord
             </span><span class="text-sm text-gray-500 dark:text-black-900">Resets your profile picture, profile banner,
@@ -68,7 +70,7 @@ if (!user) {
         </form>
         <div class="grid col-span-full grid-cols-2 gap-x-4">
           <form action={`${import.meta.env.PUBLIC_API_ENDPOINT}/api/v1/auth/delete`} method="POST" class="col-span-1">
-            <input type="hidden" hidden class="hidden" name="redirect" value={Astro.site} />
+            <input type="hidden" hidden class="hidden" name="redirect" value={Astro.site.toString()} />
             <a href="#delete-confirmation" data-turbolinks="false"
               class="flex w-full justify-center order-last font-bold px-3 py-2 text-white bg-red-500 rounded-md md:col-span-1 gap-x-2">
               <TrashIcon className="w-6 h-6" />

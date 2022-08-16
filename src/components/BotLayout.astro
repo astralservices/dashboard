@@ -9,7 +9,8 @@ const removeEmpty = (arr): any[] => arr.filter((item) => item);
 
 const { bot, showSave } = Astro.props as { bot: Bot; showSave: boolean };
 
-const page = new URL(Astro.canonicalURL);
+const page = new URL(Astro.url.pathname, Astro.site);
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const workspaceId = Astro.params.id || "";
 
 const tabs = [
@@ -52,7 +53,7 @@ const tabs = [
         class="hidden"
         type="hidden"
         name="redirect"
-        value={Astro.canonicalURL}
+        value={canonicalURL.toString()}
       />
       <div class="flex justify-between w-full">
         <div>
