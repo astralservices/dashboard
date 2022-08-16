@@ -141,14 +141,14 @@ export async function GetWorkspaceMembers(
 }
 
 export async function GetAnalytics(
-  workspace: Workspace,
+  id: string,
   env: Record<string, string>,
   Astro: AstroGlobal
 ): Promise<BotAnalytics[] | null> {
   const data: APIResponse<BotAnalytics[] | null> = await fetch(
     `${
       env.PROD ? import.meta.env.PUBLIC_API_ENDPOINT : "http://127.0.0.1:3000"
-    }/api/v1/workspaces/${workspace.id}/analytics`,
+    }/api/v1/workspaces/${id}/analytics`,
     {
       headers: Astro.request.headers,
     }

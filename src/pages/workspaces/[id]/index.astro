@@ -9,23 +9,24 @@ import WorkspaceStats from "../../../components/React/WorkspaceStats";
 import WorkspaceLayout from "../../../components/WorkspaceLayout.astro";
 import {
   GetAnalytics,
-  GetWorkspace,
   GetWorkspaceMemberCount,
 } from "../../../../utils/workspace";
 import { GetUser } from "../../../../utils/user";
 
-const user = await GetUser(import.meta.env, Astro);
+const { id } = Astro.params as { id: string };
+
+
+const [user, members, analytics] = await Promise.all([
+  GetUser(import.meta.env, Astro),
+  GetWorkspaceMemberCount(id, import.meta.env, Astro),
+  GetAnalytics(id, import.meta.env, Astro),
+])
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 if (!user) {
   return Astro.redirect(`${import.meta.env.PUBLIC_AUTH_URL}/?redirect=${canonicalURL}`);
 }
-
-const { id } = Astro.params as { id: string };
-const workspace = await GetWorkspace(id, import.meta.env, Astro);
-const analytics = await GetAnalytics(workspace, import.meta.env, Astro);
-const members = await GetWorkspaceMemberCount(id, import.meta.env, Astro);
 
 ---
 
