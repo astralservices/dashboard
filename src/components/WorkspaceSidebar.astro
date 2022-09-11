@@ -16,8 +16,8 @@ const { showLogo } = Astro.props as WorkspaceSidebarProps;
 const workspaces = await GetAllWorkspaces(import.meta.env, Astro);
 
 const currentWorkspace = Astro.params.id as string || null;
-
-const currentPage = Astro.canonicalURL.pathname
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const currentPage = canonicalURL.pathname
 
 const userMember = currentWorkspace ? await GetSelfWorkspaceMember(currentWorkspace, import.meta.env, Astro) : null;
 const user = await GetUser(import.meta.env, Astro);
@@ -83,7 +83,7 @@ const user = await GetUser(import.meta.env, Astro);
                             <img class="w-3/4" src="/img/LogotypeDark.png" alt="Astral Logotype">
                         </a>
                         ) : (
-                        <WorkspaceDropdown workspaces={workspaces} client:only />
+                        <WorkspaceDropdown workspaces={workspaces} client:only="react" />
                         <noscript>
                             <WorkspaceDropdownNoJs workspaces={workspaces} />
                         </noscript>
@@ -144,7 +144,7 @@ const user = await GetUser(import.meta.env, Astro);
                         Account Settings
                     </a>
                     <form action={`${import.meta.env.PUBLIC_API_ENDPOINT}/api/v1/auth/logout/discord`} class="w-full">
-                        <input hidden readonly name="redirect" value={Astro.site} />
+                        <input hidden readonly name="redirect" value={Astro.site.toString()} />
                         <button type="submit"
                             class="dark:text-white text-black dark:hover:bg-black-200 w-full hover:bg-gray-300 group flex items-center px-4 py-2.5 space-x-4 text-sm font-bold rounded-lg transition-colors duration-100">
                             <LogoutIcon className="w-5 h-5 mr-2" />
@@ -188,7 +188,7 @@ const user = await GetUser(import.meta.env, Astro);
                     <img class="w-3/4" src="/img/LogotypeDark.png" alt="Astral Logotype">
                 </a>
                 ) : (
-                <WorkspaceDropdown workspaces={workspaces} client:only />
+                <WorkspaceDropdown workspaces={workspaces} client:only="react" />
                 <noscript>
                     <WorkspaceDropdownNoJs workspaces={workspaces} />
                 </noscript>

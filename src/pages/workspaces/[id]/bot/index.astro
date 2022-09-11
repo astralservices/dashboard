@@ -15,9 +15,11 @@ import Switch from "../../../../components/Switch.astro";
 
 const user = await GetUser(import.meta.env, Astro);
 
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
 if (!user) {
   Astro.redirect(
-    `${import.meta.env.PUBLIC_AUTH_URL}/?redirect=${Astro.canonicalURL}`
+    `${import.meta.env.PUBLIC_AUTH_URL}/?redirect=${canonicalURL}`
   );
 }
 

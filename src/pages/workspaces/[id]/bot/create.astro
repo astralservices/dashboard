@@ -13,9 +13,11 @@ import { APIGuild } from "discord-api-types/v9";
 
 const user = await GetUser(import.meta.env, Astro);
 
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
 if (!user) {
   Astro.redirect(
-    `${import.meta.env.PUBLIC_AUTH_URL}/?redirect=${Astro.canonicalURL}`
+    `${import.meta.env.PUBLIC_AUTH_URL}/?redirect=${canonicalURL}`
   );
 }
 
@@ -24,8 +26,6 @@ const workspaceId = Astro.params.id as string;
 const regions = await GetRegions(import.meta.env, Astro);
 const workspace = await GetWorkspace(workspaceId, import.meta.env, Astro);
 const bot = await GetBotForWorkspace(workspace, import.meta.env, Astro);
-
-const page = new URL(Astro.canonicalURL);
 
 if (bot) {
   return Astro.redirect(`/workspaces/${workspaceId}/bot`);

@@ -21,6 +21,8 @@ const { id, integrationId } = Astro.params as {
 };
 const workspace = await GetWorkspace(id, import.meta.env, Astro);
 
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
 const integration = await GetIntegration(integrationId, import.meta.env, Astro);
 const workspaceIntegration = await GetWorkspaceIntegration(
   workspace,
@@ -48,7 +50,7 @@ const workspaceIntegration = await GetWorkspaceIntegration(
       <form class="flex items-center h-full" action={`${ import.meta.env.PUBLIC_API_ENDPOINT
         }/api/v1/workspaces/${id}/integrations/${ workspaceIntegration && workspaceIntegration.enabled ? "disable"
         : "enable" }/${integrationId}`} method="post">
-        <input hidden class="hidden" type="hidden" name="redirect" value={Astro.canonicalURL} />
+        <input hidden class="hidden" type="hidden" name="redirect" value={canonicalURL.toString()} />
         {workspaceIntegration && workspaceIntegration.enabled ? (
         <button type="submit" class="flex px-3 py-2 font-bold bg-red-500 rounded-md gap-x-2">
           <StatusOfflineIcon className="w-6 h-6" />
@@ -66,7 +68,7 @@ const workspaceIntegration = await GetWorkspaceIntegration(
     <div class="w-full">
       {integration.schema && Object.keys(integration.schema).length > 0 &&
       <Form schema={integration.schema} theme={tailwind} classes="w-full" method='post' data={workspaceIntegration.settings} action={`${
-        import.meta.env.PUBLIC_API_ENDPOINT }/api/v1/workspaces/${id}/integrations/${integrationId}`} redirect={Astro.canonicalURL} />}
+        import.meta.env.PUBLIC_API_ENDPOINT }/api/v1/workspaces/${id}/integrations/${integrationId}`} redirect={canonicalURL.toString()} />}
     </div>
   </WorkspaceLayout>
 </GenericLayout>
