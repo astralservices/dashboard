@@ -11,13 +11,13 @@
     "nvs": "nvs use 17"
   },
   "devDependencies": {
-    "@astrojs/partytown": "^0.1.9",
-    "@astrojs/react": "^0.3.1",
-    "@astrojs/tailwind": "^0.2.5",
+    "@astrojs/partytown": "^1.0.0",
+    "@astrojs/react": "^1.1.2",
+    "@astrojs/tailwind": "^1.0.0",
     "@astrojs/turbolinks": "^0.1.4",
     "@babel/core": "^7.18.10",
     "@types/lodash": "^4.14.182",
-    "astro": "^1.0.0-beta.63",
+    "astro": "^1.2.1",
     "prettier-plugin-astro": "^0.1.0-next.5",
     "react": "^17.0.2 || ^18.0.0",
     "react-dom": "^17.0.2 || ^18.0.0",
