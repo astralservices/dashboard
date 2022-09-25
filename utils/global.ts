@@ -10,7 +10,9 @@ export async function GetRegions(
       env.PROD ? import.meta.env.PUBLIC_API_ENDPOINT : "http://127.0.0.1:3000"
     }/api/v1/regions`,
     {
-      headers: Astro.request.headers,
+      headers: {
+        cookie: Astro.request.headers.get("cookie"),
+      },
     }
   )
     .then((res) => res.json())
@@ -33,7 +35,9 @@ export async function GetIntegrations(
       env.PROD ? import.meta.env.PUBLIC_API_ENDPOINT : "http://127.0.0.1:3000"
     }/api/v1/integrations`,
     {
-      headers: Astro.request.headers,
+      headers: {
+        cookie: Astro.request.headers.get("cookie"),
+      },
     }
   )
     .then((res) => res.json())
@@ -57,7 +61,9 @@ export async function GetIntegration(
       env.PROD ? import.meta.env.PUBLIC_API_ENDPOINT : "http://127.0.0.1:3000"
     }/api/v1/integrations/${id}`,
     {
-      headers: Astro.request.headers,
+      headers: {
+        cookie: Astro.request.headers.get("cookie"),
+      },
     }
   )
     .then((res) => res.json())

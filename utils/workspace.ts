@@ -21,7 +21,9 @@ export async function GetPlans(
       env.PROD ? import.meta.env.PUBLIC_API_ENDPOINT : "http://127.0.0.1:3000"
     }/api/v1/plans`,
     {
-      headers: Astro.request.headers,
+      headers: {
+        cookie: Astro.request.headers.get("cookie"),
+      },
     }
   )
     .then((res) => res.json())
@@ -45,7 +47,9 @@ export async function GetWorkspace(
       env.PROD ? import.meta.env.PUBLIC_API_ENDPOINT : "http://127.0.0.1:3000"
     }/api/v1/workspaces/${id}`,
     {
-      headers: Astro.request.headers,
+      headers: {
+        cookie: Astro.request.headers.get("cookie"),
+      },
     }
   )
     .then((res) => res.json())
@@ -69,7 +73,9 @@ export async function GetWorkspaceMemberCount(
       env.PROD ? import.meta.env.PUBLIC_API_ENDPOINT : "http://127.0.0.1:3000"
     }/api/v1/workspaces/${id}/members?count=true`,
     {
-      headers: Astro.request.headers,
+      headers: {
+        cookie: Astro.request.headers.get("cookie"),
+      },
     }
   )
     .then((res) => res.json())
@@ -94,7 +100,9 @@ export async function GetSelfWorkspaceMember(
       env.PROD ? import.meta.env.PUBLIC_API_ENDPOINT : "http://127.0.0.1:3000"
     }/api/v1/workspaces/${id}/members/${user.id}`,
     {
-      headers: Astro.request.headers,
+      headers: {
+        cookie: Astro.request.headers.get("cookie"),
+      },
     }
   )
     .then((res) => res.json())
@@ -118,7 +126,9 @@ export async function GetWorkspaceMembers(
       env.PROD ? import.meta.env.PUBLIC_API_ENDPOINT : "http://127.0.0.1:3000"
     }/api/v1/workspaces/${id}/members`,
     {
-      headers: Astro.request.headers,
+      headers: {
+        cookie: Astro.request.headers.get("cookie"),
+      },
     }
   )
     .then((res) => res.json())
@@ -150,7 +160,9 @@ export async function GetAnalytics(
       env.PROD ? import.meta.env.PUBLIC_API_ENDPOINT : "http://127.0.0.1:3000"
     }/api/v1/workspaces/${id}/analytics`,
     {
-      headers: Astro.request.headers,
+      headers: {
+        cookie: Astro.request.headers.get("cookie"),
+      },
     }
   )
     .then((res) => res.json())
@@ -174,7 +186,9 @@ export async function GetWorkspaceIntegrations(
       env.PROD ? import.meta.env.PUBLIC_API_ENDPOINT : "http://127.0.0.1:3000"
     }/api/v1/workspaces/${workspace.id}/integrations`,
     {
-      headers: Astro.request.headers,
+      headers: {
+        cookie: Astro.request.headers.get("cookie"),
+      },
     }
   )
     .then((res) => res.json())
@@ -199,7 +213,9 @@ export async function GetWorkspaceIntegration(
       env.PROD ? import.meta.env.PUBLIC_API_ENDPOINT : "http://127.0.0.1:3000"
     }/api/v1/workspaces/${workspace.id}/integrations/${id}`,
     {
-      headers: Astro.request.headers,
+      headers: {
+        cookie: Astro.request.headers.get("cookie"),
+      },
     }
   )
     .then((res) => res.json())

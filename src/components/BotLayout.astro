@@ -17,24 +17,29 @@ const tabs = [
   {
     name: "General",
     href: `/workspaces/${workspaceId}/bot`,
-    selected: page.pathname === `/workspaces/${workspaceId}/bot/`,
+    selected: page.pathname === `/workspaces/${workspaceId}/bot`,
   },
   {
     name: "Modules",
     href: `/workspaces/${workspaceId}/bot/modules`,
-    selected: page.pathname === `/workspaces/${workspaceId}/bot/modules/`,
+    selected: page.pathname === `/workspaces/${workspaceId}/bot/modules`,
+  },
+  {
+    name: "Permissions",
+    href: `/workspaces/${workspaceId}/bot/permissions`,
+    selected: page.pathname === `/workspaces/${workspaceId}/bot/permissions`,
   },
   {
     name: "Custom Commands",
     href: `/workspaces/${workspaceId}/bot/commands`,
-    selected: page.pathname === `/workspaces/${workspaceId}/bot/commands/`,
+    selected: page.pathname === `/workspaces/${workspaceId}/bot/commands`,
     disabled: true,
     tooltip: "Soon™",
   },
   {
     name: "Settings",
     href: `/workspaces/${workspaceId}/bot/settings`,
-    selected: page.pathname === `/workspaces/${workspaceId}/bot/settings/`,
+    selected: page.pathname === `/workspaces/${workspaceId}/bot/settings`,
   },
 ];
 ---
