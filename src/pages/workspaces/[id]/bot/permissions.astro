@@ -8,6 +8,7 @@ import { GetUser } from "../../../../../utils/user";
 import { GetWorkspace } from "../../../../../utils/workspace";
 import BotLayout from "../../../../components/BotLayout.astro";
 import RolePermissions from "../../../../components/React/RolePermissions";
+import UserPermissions from "../../../../components/React/UserPermissions";
 
 const user = await GetUser(import.meta.env, Astro);
 
@@ -36,8 +37,6 @@ const roles = await fetch(
     },
   }
 ).then((res) => res.json());
-
-console.log(bot);
 ---
 
 <BotLayout showSave={true} bot={bot}>
@@ -70,6 +69,16 @@ console.log(bot);
             <RolePermissions
               client:only="react"
               roles={roles}
+              permissions={bot.permissions}
+            />
+          </div>
+
+          <div class="grid grid-cols-2 col-span-full gap-y-2">
+            <div class="col-span-full">
+              <h1 class="flex w-full gap-2 text-xl font-semibold">Users</h1>
+            </div>
+            <UserPermissions
+              client:only="react"
               permissions={bot.permissions}
             />
           </div>
