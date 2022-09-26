@@ -1,6 +1,3 @@
-import { ActivitiesOptions, PresenceData } from "discord.js";
-import { CommandOptions } from "discord-akairo";
-
 export type SessionAPI = {
   id: string;
   created_at: string;
@@ -182,8 +179,8 @@ export type Bot = {
   settings: {
     guild: string;
     prefix: string;
-    status: PresenceData["status"];
-    activities: ActivitiesOptions[];
+    status: string;
+    activities: any[];
     randomizeActivities: boolean;
     activityInterval: number;
     currentActivity: number;
@@ -206,15 +203,21 @@ export type Bot = {
   };
   token: string;
   commands: BotCommand[];
-  analytics: {
-    commands: number;
-    [key: string]: any;
-  };
+  permissions: {
+    defaultAdminRules: string[],
+    defaultUserRules: string[]
+    users?: {
+      [key: string]: string[];
+    },
+    roles?: {
+      [key: string]: string[];
+    },
+  }
 };
 
 export type BotCommand = {
   id: string;
-  options: CommandOptions;
+  options: any;
   enabled: boolean;
 };
 

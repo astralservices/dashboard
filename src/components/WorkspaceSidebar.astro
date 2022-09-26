@@ -275,6 +275,19 @@ const user = await GetUser(import.meta.env, Astro);
                         </span>
                         Beta 2
                     </span>
+                    
+                    {!import.meta.env.PROD || import.meta.env.NODE_ENV !== 'production' ? (
+                    <span
+                        class="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-astral-100 text-amber-800 has-tooltip">
+                        <span
+                            class="p-1 mt-14 text-sm text-white transition duration-300 rounded bg-black-400 opacity-90 tooltip">
+                            This is a development build of Astral.
+                        </span>
+                        Dev
+                    </span>
+                    ) : (
+                        <></>
+                    )}
                 </div>
             </div>
         </div>
