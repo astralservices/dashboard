@@ -17,24 +17,29 @@ const tabs = [
   {
     name: "General",
     href: `/workspaces/${workspaceId}/bot`,
-    selected: page.pathname === `/workspaces/${workspaceId}/bot/`,
+    selected: page.pathname === `/workspaces/${workspaceId}/bot`,
   },
   {
     name: "Modules",
     href: `/workspaces/${workspaceId}/bot/modules`,
-    selected: page.pathname === `/workspaces/${workspaceId}/bot/modules/`,
+    selected: page.pathname === `/workspaces/${workspaceId}/bot/modules`,
+  },
+  {
+    name: "Permissions",
+    href: `/workspaces/${workspaceId}/bot/permissions`,
+    selected: page.pathname === `/workspaces/${workspaceId}/bot/permissions`,
   },
   {
     name: "Custom Commands",
     href: `/workspaces/${workspaceId}/bot/commands`,
-    selected: page.pathname === `/workspaces/${workspaceId}/bot/commands/`,
+    selected: page.pathname === `/workspaces/${workspaceId}/bot/commands`,
     disabled: true,
     tooltip: "Soon™",
   },
   {
     name: "Settings",
     href: `/workspaces/${workspaceId}/bot/settings`,
-    selected: page.pathname === `/workspaces/${workspaceId}/bot/settings/`,
+    selected: page.pathname === `/workspaces/${workspaceId}/bot/settings`,
   },
 ];
 ---
@@ -47,6 +52,7 @@ const tabs = [
         import.meta.env.PUBLIC_API_ENDPOINT
       }/api/v1/workspaces/${workspaceId}/bot`}
       method="POST"
+      enctype="multipart/form-data"
     >
       <input
         hidden
@@ -79,7 +85,10 @@ const tabs = [
         class="flex justify-center w-full py-2 align-middle rounded-lg bg-gray-50 dark:bg-black-300"
       >
         <div class="block">
-          <nav class="flex md:space-x-4" aria-label="Tabs">
+          <nav
+            class="flex md:space-x-4 flex-wrap justify-center"
+            aria-label="Tabs"
+          >
             {tabs.map((tab) => (
               <a
                 href={!tab.disabled ? tab.href : undefined}

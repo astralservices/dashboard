@@ -42,6 +42,7 @@ export default function WorkspaceStats({
     labels: botAnalytics.map((a) => new Date(a.timestamp).toLocaleDateString()),
     datasets: [
       {
+        type: "line",
         label: "Commands",
         data: botAnalytics.map((a) =>
           Object.values(a.commands ?? {}).reduce((acc, curr) => acc + curr, 0)
@@ -59,6 +60,7 @@ export default function WorkspaceStats({
         yAxisID: "y1",
       },
       {
+        type: "line",
         label: "Net Server Members",
         data: botAnalytics.map((a) => a.members ?? 0),
         backgroundColor: "rgba(74, 186, 122, 0.2)",

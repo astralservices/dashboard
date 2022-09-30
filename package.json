@@ -12,12 +12,12 @@
   },
   "devDependencies": {
     "@astrojs/partytown": "^1.0.0",
-    "@astrojs/react": "^1.1.2",
-    "@astrojs/tailwind": "^1.0.0",
+    "@astrojs/react": "^1.1.4",
+    "@astrojs/tailwind": "^2.0.1",
     "@astrojs/turbolinks": "^0.1.4",
     "@babel/core": "^7.18.10",
     "@types/lodash": "^4.14.182",
-    "astro": "^1.2.1",
+    "astro": "^1.3.0",
     "prettier-plugin-astro": "^0.1.0-next.5",
     "react": "^17.0.2 || ^18.0.0",
     "react-dom": "^17.0.2 || ^18.0.0",
@@ -31,12 +31,14 @@
     "@icons-pack/react-simple-icons": "^5.1.2",
     "@julian_cataldo/astro-prefetch": "^0.10.7",
     "@tailwindcss/forms": "^0.5.2",
+    "@types/react": "^18.0.21",
     "astro-forms": "^1.0.11",
     "chart.js": "^3.8.0",
     "discord-api-types": "^0.36.2",
     "dotenv": "^16.0.1",
     "lodash": "^4.17.21",
     "react-chartjs-2": "^4.2.0",
+    "@astralservices/react-chip": "^1.0.0",
     "twemoji-parser": "^14.0.0"
   }
 }

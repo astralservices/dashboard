@@ -11,7 +11,7 @@ import WorkspaceLayout from "../../../../components/WorkspaceLayout.astro";
 
 const { id } = Astro.params as { id: string };
 const workspace = await GetWorkspace(id, import.meta.env, Astro);
-const integrations = (await GetIntegrations(import.meta.env, Astro)).filter((i) => i.enabled);
+const integrations = (await GetIntegrations(import.meta.env, Astro)).filter((i) => (import.meta.env.PROD || import.meta.env.NODE_ENV === 'production' ? i.enabled : true));
 const workspaceIntegrations = await GetWorkspaceIntegrations(
   workspace,
   import.meta.env,
