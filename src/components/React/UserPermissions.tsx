@@ -65,8 +65,10 @@ export default function UserPermissions({
                 inputClass="bg-black-300 text-white px-3 py-2 border-none w-full"
                 chipClass="bg-black-400 text-white hover:bg-black-500 transition duration-200 p-2 rounded-md m-2"
                 focusClass="bg-black-500"
-                // regex should match the domain syntax ((+/-)astral.{category or *}.{command or *})
-                regex={/^(\+|-)?astral\.(?:\*|[\w-]+)\.(?:\*|[\w-]+)$/}
+                // regex should match the domain syntax ((+/-)astral.{category.{command or *} or *})
+                // there could be like "+astral.*" or "+astral.category.*" or "+astral.category.command"
+                // but not "+astral.category.command.subcommand" or "+astral.category"
+                regex={/(\+|\-)?astral\.(?:\*|(?:(?:\w+|\*)\.(?:\*|\w+)))/}
                 onChange={(chips) => {
                   setPerms((p) => ({
                     ...p,
