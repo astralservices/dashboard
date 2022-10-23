@@ -33,9 +33,14 @@ const channels: APIGuildChannel<ChannelType.GuildText>[] = await fetch(
       "Content-Type": "application/json",
     },
   }
-)
-  .then((res) => res.json())
-  .then((x) => x.filter((c) => c.type === 0));
+).then(async (res) => {
+  if (res.ok) {
+    const x = await res.json();
+    return x.filter((c) => c.type === 0);
+  } else {
+    return [];
+  }
+});
 ---
 
 <BotLayout showSave={true} bot={bot}>
@@ -113,24 +118,38 @@ const channels: APIGuildChannel<ChannelType.GuildText>[] = await fetch(
                         <span class="inline-flex items-center px-3 text-white rounded-l-md bg-black-400 sm:text-sm">
                           #
                         </span>
-                        <select
-                          id="channel"
-                          name="settings.modules.moderation.options.logging.channel"
-                          class="flex-1 block w-full min-w-0 px-1 py-2 border-none rounded-none bg-black-400 rounded-r-md sm:text-sm"
-                        >
-                          {channels[0] &&
-                            channels.map((channel) => (
-                              <option
-                                value={channel.id}
-                                selected={
-                                  bot.settings.modules.moderation.options
-                                    .logging.channel === channel.id
-                                }
-                              >
-                                {channel.name}
-                              </option>
-                            ))}
-                        </select>
+                        {channels[0] ? (
+                          <select
+                            id="channel"
+                            name="settings.modules.moderation.options.logging.channel"
+                            class="flex-1 block w-full min-w-0 px-1 py-2 border-none rounded-none bg-black-400 rounded-r-md sm:text-sm"
+                          >
+                            {channels[0] &&
+                              channels.map((channel) => (
+                                <option
+                                  value={channel.id}
+                                  selected={
+                                    bot.settings.modules.moderation.options
+                                      .logging.channel === channel.id
+                                  }
+                                >
+                                  {channel.name}
+                                </option>
+                              ))}
+                          </select>
+                        ) : (
+                          <input
+                            type="text"
+                            name="settings.modules.moderation.options.logging.channel"
+                            id="channel"
+                            class="flex-1 block w-full min-w-0 px-1 py-2 border-none rounded-none bg-black-400 rounded-r-md sm:text-sm"
+                            placeholder="Channel ID"
+                            value={
+                              bot.settings.modules.moderation.options.logging
+                                .channel
+                            }
+                          />
+                        )}
                       </div>
                     </div>
                   </div>
