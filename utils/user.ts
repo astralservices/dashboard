@@ -9,7 +9,7 @@ import {
 
 export async function GetUser(
   env: Record<string, string>,
-  Astro: AstroGlobal
+  Astro: Readonly<AstroGlobal<Record<string, any>>>
 ): Promise<DiscordUserInfo | null> {
   const data: APIResponse<DiscordUserInfo> = await fetch(
     `${
@@ -32,7 +32,7 @@ export async function GetUser(
 
 export async function GetProviders(
   env: Record<string, string>,
-  Astro: AstroGlobal
+  Astro: Readonly<AstroGlobal<Record<string, any>>>
 ): Promise<Provider[] | null> {
   const data: APIResponse<Provider[]> = await fetch(
     `${
@@ -56,7 +56,7 @@ export async function GetProviders(
 export async function GetProvider(
   provider: string,
   env: Record<string, string>,
-  Astro: AstroGlobal
+  Astro: Readonly<AstroGlobal<Record<string, any>>>
 ): Promise<Provider | null> {
   const data: APIResponse<Provider> = await fetch(
     `${
@@ -79,7 +79,7 @@ export async function GetProvider(
 
 export async function GetAllWorkspaces(
   env: Record<string, string>,
-  Astro: AstroGlobal
+  Astro: Readonly<AstroGlobal<Record<string, any>>>
 ): Promise<Workspace[] | null> {
   const data: APIResponse<WorkspaceMember[]> = await fetch(
     `${

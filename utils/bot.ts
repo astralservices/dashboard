@@ -4,7 +4,7 @@ import { Workspace, BotAnalytics, APIResponse, Bot } from "../types";
 export async function GetBotForWorkspace(
   workspace: Workspace,
   env: Record<string, string>,
-  Astro: AstroGlobal
+  Astro: Readonly<AstroGlobal<Record<string, any>>>
 ): Promise<Bot | null> {
   const data: APIResponse<Bot | null> = await fetch(
     `${

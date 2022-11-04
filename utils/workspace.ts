@@ -14,7 +14,7 @@ import { GetUser } from "./user";
 
 export async function GetPlans(
   env: Record<string, string>,
-  Astro: AstroGlobal
+  Astro: Readonly<AstroGlobal<Record<string, any>>>
 ): Promise<Plan[]> {
   const data: APIResponse<Plan[]> = await fetch(
     `${
@@ -38,7 +38,7 @@ export async function GetPlans(
 export async function GetWorkspace(
   id: string,
   env: Record<string, string>,
-  Astro: AstroGlobal
+  Astro: Readonly<AstroGlobal<Record<string, any>>>
 ): Promise<Workspace> {
   const data: APIResponse<Workspace> = await fetch(
     `${
@@ -62,7 +62,7 @@ export async function GetWorkspace(
 export async function GetWorkspaceMemberCount(
   id: string,
   env: Record<string, string>,
-  Astro: AstroGlobal
+  Astro: Readonly<AstroGlobal<Record<string, any>>>
 ): Promise<number> {
   const data: APIResponse<number> = await fetch(
     `${
@@ -86,7 +86,7 @@ export async function GetWorkspaceMemberCount(
 export async function GetSelfWorkspaceMember(
   id: string,
   env: Record<string, string>,
-  Astro: AstroGlobal
+  Astro: Readonly<AstroGlobal<Record<string, any>>>
 ): Promise<WorkspaceMember> {
   const user = await GetUser(env, Astro);
   const data: APIResponse<WorkspaceMember> = await fetch(
@@ -111,7 +111,7 @@ export async function GetSelfWorkspaceMember(
 export async function GetWorkspaceMembers(
   id: string,
   env: Record<string, string>,
-  Astro: AstroGlobal
+  Astro: Readonly<AstroGlobal<Record<string, any>>>
 ): Promise<WorkspaceMember[]> {
   const data: APIResponse<WorkspaceMember[]> = await fetch(
     `${
@@ -143,7 +143,7 @@ export async function GetWorkspaceMembers(
 export async function GetAnalytics(
   id: string,
   env: Record<string, string>,
-  Astro: AstroGlobal
+  Astro: Readonly<AstroGlobal<Record<string, any>>>
 ): Promise<BotAnalytics[] | null> {
   const data: APIResponse<BotAnalytics[] | null> = await fetch(
     `${
@@ -167,7 +167,7 @@ export async function GetAnalytics(
 export async function GetWorkspaceIntegrations(
   workspace: Workspace,
   env: Record<string, string>,
-  Astro: AstroGlobal
+  Astro: Readonly<AstroGlobal<Record<string, any>>>
 ): Promise<WorkspaceIntegration[] | null> {
   const data: APIResponse<WorkspaceIntegration[] | null> = await fetch(
     `${
@@ -192,7 +192,7 @@ export async function GetWorkspaceIntegration(
   workspace: Workspace,
   id: string,
   env: Record<string, string>,
-  Astro: AstroGlobal
+  Astro: Readonly<AstroGlobal<Record<string, any>>>
 ): Promise<WorkspaceIntegration | null> {
   const data: APIResponse<WorkspaceIntegration | null> = await fetch(
     `${

@@ -3,7 +3,7 @@ import { APIResponse, Integration, Region } from "../types";
 
 export async function GetRegions(
   env: Record<string, string>,
-  Astro: AstroGlobal
+  Astro: Readonly<AstroGlobal<Record<string, any>>>
 ): Promise<Region[] | null> {
   const data: APIResponse<Region[]> = await fetch(
     `${
@@ -26,7 +26,7 @@ export async function GetRegions(
 
 export async function GetIntegrations(
   env: Record<string, string>,
-  Astro: AstroGlobal
+  Astro: Readonly<AstroGlobal<Record<string, any>>>
 ): Promise<Integration[] | null> {
   const data: APIResponse<Integration[] | null> = await fetch(
     `${
@@ -50,7 +50,7 @@ export async function GetIntegrations(
 export async function GetIntegration(
   id: string,
   env: Record<string, string>,
-  Astro: AstroGlobal
+  Astro: Readonly<AstroGlobal<Record<string, any>>>
 ): Promise<Integration | null> {
   const data: APIResponse<Integration | null> = await fetch(
     `${
