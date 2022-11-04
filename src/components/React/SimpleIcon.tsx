@@ -1,5 +1,5 @@
-import * as SimpleIcons from '@icons-pack/react-simple-icons';
-import { SVGProps } from 'react';
+import * as SimpleIcons from "@icons-pack/react-simple-icons";
+import { SVGProps } from "react";
 
 export default function SimpleIcon({
   icon,

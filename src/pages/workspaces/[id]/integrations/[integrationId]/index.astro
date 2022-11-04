@@ -13,8 +13,8 @@ import {
 } from "../../../../../../utils/workspace";
 import GenericLayout from "../../../../../components/GenericLayout.astro";
 import WorkspaceLayout from "../../../../../components/WorkspaceLayout.astro";
-import { Form } from 'astro-forms'
-import tailwind from 'astro-forms/themes/tailwind'
+import { Form } from "astro-forms";
+import tailwind from "astro-forms/themes/tailwind";
 const { id, integrationId } = Astro.params as {
   id: string;
   integrationId: string;
@@ -34,7 +34,10 @@ const workspaceIntegration = await GetWorkspaceIntegration(
 
 <GenericLayout>
   <WorkspaceLayout sidebar={{ showLogo: false }}>
-    <a href={`/workspaces/${id}/integrations`} class="flex items-center font-bold gap-x-2 text-astral">
+    <a
+      href={`/workspaces/${id}/integrations`}
+      class="flex items-center font-bold gap-x-2 text-astral"
+    >
       <ArrowLeftIcon className="h-6 w-6" />
       Go Back
     </a>
@@ -47,28 +50,60 @@ const workspaceIntegration = await GetWorkspaceIntegration(
           {integration.description}
         </p>
       </div>
-      <form class="flex items-center h-full" action={`${ import.meta.env.PUBLIC_API_ENDPOINT
-        }/api/v1/workspaces/${id}/integrations/${ workspaceIntegration && workspaceIntegration.enabled ? "disable"
-        : "enable" }/${integrationId}`} method="post">
-        <input hidden class="hidden" type="hidden" name="redirect" value={canonicalURL.toString()} />
+      <form
+        class="flex items-center h-full"
+        action={`${
+          import.meta.env.PUBLIC_API_ENDPOINT
+        }/api/v1/workspaces/${id}/integrations/${
+          workspaceIntegration && workspaceIntegration.enabled
+            ? "disable"
+            : "enable"
+        }/${integrationId}`}
+        method="post"
+      >
+        <input
+          hidden
+          class="hidden"
+          type="hidden"
+          name="redirect"
+          value={canonicalURL.toString()}
+        />
         {workspaceIntegration && workspaceIntegration.enabled ? (
-        <button type="submit" class="flex px-3 py-2 font-bold bg-red-500 rounded-md gap-x-2">
-          <StatusOfflineIcon className="w-6 h-6" />
-          Disable
-        </button>
+          <button
+            type="submit"
+            class="flex px-3 py-2 font-bold bg-red-500 rounded-md gap-x-2"
+          >
+            <StatusOfflineIcon className="w-6 h-6" />
+            Disable
+          </button>
         ) : (
-        <button type="submit" class="flex px-3 py-2 font-bold bg-green-500 rounded-md gap-x-2">
-          <StatusOnlineIcon className="w-6 h-6" />
-          Enable
-        </button>
+          <button
+            type="submit"
+            class="flex px-3 py-2 font-bold bg-green-500 rounded-md gap-x-2"
+          >
+            <StatusOnlineIcon className="w-6 h-6" />
+            Enable
+          </button>
         )}
       </form>
     </div>
 
     <div class="w-full">
-      {integration.schema && Object.keys(integration.schema).length > 0 &&
-      <Form schema={integration.schema} theme={tailwind} classes="w-full" method='post' data={workspaceIntegration.settings} action={`${
-        import.meta.env.PUBLIC_API_ENDPOINT }/api/v1/workspaces/${id}/integrations/${integrationId}`} redirect={canonicalURL.toString()} />}
+      {integration.schema &&
+        Object.keys(integration.schema).length > 0 &&
+        workspaceIntegration && (
+          <Form
+            schema={integration.schema}
+            theme={tailwind}
+            classes="w-full"
+            method="post"
+            data={workspaceIntegration.settings}
+            action={`${
+              import.meta.env.PUBLIC_API_ENDPOINT
+            }/api/v1/workspaces/${id}/integrations/${integrationId}`}
+            redirect={canonicalURL.toString()}
+          />
+        )}
     </div>
   </WorkspaceLayout>
 </GenericLayout>
