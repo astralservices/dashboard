@@ -1,0 +1,100 @@
+---
+import {
+  ClipboardCopyIcon,
+  ExternalLinkIcon,
+} from "@heroicons/react/outline/esm";
+import { GetBotForWorkspace } from "../../../../../utils/bot";
+import { GetUser } from "../../../../../utils/user";
+import { GetWorkspace } from "../../../../../utils/workspace";
+import BotLayout from "../../../../components/BotLayout.astro";
+import RolePermissions from "../../../../components/React/RolePermissions";
+import UserPermissions from "../../../../components/React/UserPermissions";
+
+const user = await GetUser(import.meta.env, Astro);
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+if (!user) {
+  return Astro.redirect(
+    `${import.meta.env.PUBLIC_AUTH_URL}/?redirect=${canonicalURL}`
+  );
+}
+
+const workspaceId = Astro.params.id as string;
+const workspace = await GetWorkspace(workspaceId, import.meta.env, Astro);
+const bot = await GetBotForWorkspace(workspace, import.meta.env, Astro);
+
+if (!bot) {
+  return Astro.redirect(`/workspaces/${workspaceId}/bot/create`);
+}
+
+const roles = await fetch(
+  `https://discord.com/api/v9/guilds/${bot.settings.guild}/roles`,
+  {
+    method: "GET",
+    headers: {
+      Authorization: `Bot ${bot.token}`,
+    },
+  }
+).then((res) => res.json());
+---
+
+<BotLayout showSave={true} bot={bot}>
+  <style lang="scss" is:global>
+    .dlOJUL {
+      @apply bg-black-300 py-2 flex flex-wrap gap-y-2 rounded-r-md border-none #{!important};
+    }
+    .dcWLDJ {
+      @apply bg-transparent #{!important};
+    }
+    .dKRlyv {
+      @apply rounded-sm #{!important};
+    }
+  </style>
+
+  <div class="w-full h-full px-2">
+    {bot ? (
+      <div class="space-y-10">
+        <div class="grid w-full grid-cols-2 gap-y-7">
+          <div class="col-span-full">
+            <h1 class="flex w-full gap-2 text-2xl font-bold">Permissions</h1>
+            <p class="text-base font-semibold text-gray-800 dark:text-gray-300">
+              Set the granular permissions for users and roles. View the{" "}
+              <a
+                href="https://docs.astralapp.io/docs/get-started/permissions/"
+                target="_blank"
+                class="text-blue-500 hover:text-blue-600 dark:hover:text-blue-400"
+              >
+                documentation
+                <ExternalLinkIcon className="w-4 h-4 inline" />
+              </a>{" "}
+              for more information.
+            </p>
+          </div>
+          <div class="grid grid-cols-2 col-span-full gap-y-2">
+            <div class="col-span-full">
+              <h1 class="flex w-full gap-2 text-xl font-semibold">Roles</h1>
+            </div>
+            <RolePermissions
+              client:only="react"
+              roles={roles}
+              permissions={bot.permissions}
+            />
+          </div>
+
+          <div class="grid grid-cols-2 col-span-full gap-y-2">
+            <div class="col-span-full">
+              <h1 class="flex w-full gap-2 text-xl font-semibold">Users</h1>
+            </div>
+            <UserPermissions
+              client:only="react"
+              permissions={bot.permissions}
+            />
+          </div>
+        </div>
+      </div>
+    ) : (
+      <p>something</p>
+    )}
+  </div>
+</BotLayout>

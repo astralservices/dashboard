@@ -16,7 +16,9 @@ export async function GetUser(
       env.PROD ? import.meta.env.PUBLIC_API_ENDPOINT : "http://127.0.0.1:3000"
     }/api/v1/auth/session`,
     {
-      headers: Astro.request.headers,
+      headers: {
+        cookie: Astro.request.headers.get("cookie"),
+      },
     }
   )
     .then((res) => res.json())
@@ -39,7 +41,9 @@ export async function GetProviders(
       env.PROD ? import.meta.env.PUBLIC_API_ENDPOINT : "http://127.0.0.1:3000"
     }/api/v1/auth/providers`,
     {
-      headers: Astro.request.headers,
+      headers: {
+        cookie: Astro.request.headers.get("cookie"),
+      },
     }
   )
     .then((res) => res.json())
@@ -63,7 +67,9 @@ export async function GetProvider(
       env.PROD ? import.meta.env.PUBLIC_API_ENDPOINT : "http://127.0.0.1:3000"
     }/api/v1/auth/providers/${provider}`,
     {
-      headers: Astro.request.headers,
+      headers: {
+        cookie: Astro.request.headers.get("cookie"),
+      },
     }
   )
     .then((res) => res.json())
@@ -86,7 +92,9 @@ export async function GetAllWorkspaces(
       env.PROD ? import.meta.env.PUBLIC_API_ENDPOINT : "http://127.0.0.1:3000"
     }/api/v1/workspaces`,
     {
-      headers: Astro.request.headers,
+      headers: {
+        cookie: Astro.request.headers.get("cookie"),
+      },
     }
   )
     .then((res) => res.json())

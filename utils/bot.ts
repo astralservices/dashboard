@@ -11,7 +11,9 @@ export async function GetBotForWorkspace(
       env.PROD ? import.meta.env.PUBLIC_API_ENDPOINT : "http://127.0.0.1:3000"
     }/api/v1/workspaces/${workspace.id}/bot`,
     {
-      headers: Astro.request.headers,
+      headers: {
+        cookie: Astro.request.headers.get("cookie"),
+      },
     }
   )
     .then((res) => res.json())
